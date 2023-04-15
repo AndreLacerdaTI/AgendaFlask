@@ -1,0 +1,104 @@
+/*
+Pagina inicial
+*/
+.menu-botoes{
+    float: left;
+}
+.banner{
+    width: 100%;
+}
+.imagem-original{
+    width: 80%;
+    height: 500px;
+}
+.imagem-alternativa{
+    width: 80%;
+    height: 500px;
+}
+
+.logo {
+    width: 30%;
+    position: relative;
+    margin: auto;
+}
+
+h2 {
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #363636;
+    font-size: 20;
+    font-family: 'Arial';
+    font-weight: 600;
+    border-radius: 22px;
+    border: 2px solid #FED100;
+    width: 48%;
+    float: left;
+}
+.titulo-direto{
+    margin-left: 0.5%;
+}
+body {
+    background-color: rgb(255, 255, 255);
+}
+
+table{
+    width: 48%;
+    font-family: 'Arial';
+    padding: 10;
+    float: left;
+    margin-right: 1%;
+    border: 2px solid #FED100;
+    border-radius: 40px;
+    padding: 5px;
+}
+
+.tabela-direto{
+    float: left;
+}
+.titulo-nome {
+    text-align: center;
+    width:70%;
+    background:#262424;
+    border-radius: 50px 0px 0px 0px;
+    color: white;
+    padding: 8px;
+}
+.titulo-ramal {
+    text-align: center;
+    width:70%;
+    background:#262424;
+    border-radius: 0px 50px 0px 0px;
+    color: white;
+    padding: 8px;
+}
+td {
+    color:#262424;
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 1px solid #aaaaaa;
+    padding: 8px;
+    transition: 5s;
+}
+
+tr:hover {
+    background-color: #FED100;
+    transition: 0.3s;
+}
+
+.rodape-ramal  {
+    width:30%;
+    color: white;
+    background:#ffffff;
+    border-radius: 0px 0px 50px 0px;
+    border-bottom: 1px solid #ffffff;
+}
+.rodape-nome  {
+    text-align: center;
+    width:70%;
+    color: white;
+    background:#ffffff;
+    border-radius: 0px 0px 0px 50px;
+    border-bottom: 1px solid #ffffff;
+
+}

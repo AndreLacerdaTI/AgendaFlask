@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <!--
+    <style>body {
+        background-color: #ff0000;
+        height: 29.7cm;
+        padding: 10;
+    }</style>
+    -->
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda de Ramais - MG</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <center><img class="logo" src="{{ url_for('static', filename='images/ai.png') }}"></center>
+    <h1></h1>
+    <h2 class="titulo-interno">RAMAL INTERNO</h2>
+    <h2 class="titulo-direto">RAMAL DIRETO</h2>
+    <table class="tebela-interno">
+        <thead>
+            <tr>
+                <th class="titulo-nome">Nome</th>
+                <th class="titulo-ramal">Ramal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+            
+            </tr>
+            {% endfor %}
+            <tr>
+                <td class="rodape-nome"> </td>
+                <td class="rodape-ramal"> </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <table class="tebela-direto">
+        <thead>
+            <tr>
+                <th class="titulo-nome">Nome</th>
+                <th class="titulo-ramal">Ramal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows2 %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td class="rodape-nome"> </td>
+                <td class="rodape-ramal"> </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

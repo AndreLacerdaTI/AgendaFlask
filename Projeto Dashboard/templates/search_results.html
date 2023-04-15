@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+</head>
+<body>
+    <label for="search_results">Nome:</label>
+    <input type="text" name="search_results" id="search_results" value="{{ search_results }}" required>
+    <label for="resultado_ramal">Resultado:</label>
+    <input type="text" name="resultado_ramal" id="resultado_ramal" value="{{ resultado_ramal }}" required>
+    <form method="post" action="{{ url_for('search_term') }}">
+        <button>Finalizar alteração</button>
+    </form>
+    {% if mensagemRetorno %}
+            <p class="mensagem-retorno">{{mensagemRetorno}}</p>
+    {% endif %}
+</body>
+</html>
