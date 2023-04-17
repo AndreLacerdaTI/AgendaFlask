@@ -1,9 +1,72 @@
 /*
 Pagina inicial
 */
-.menu-botoes{
-    float: left;
+
+@media print {
+/* Hide the element with ID 'my-element' when the page is printed */
+#esconder {
+    display: none;
 }
+}
+
+.menu {
+    color: #000000;
+    background-color: #363636;
+    width: 100%;
+    height: 60px;
+    position: relative;
+    text-align: center;
+    border-radius: 24px;
+}
+
+.botao-atual{
+    color: #ffffff;
+    border-bottom: 2px solid #FED100;
+    display:inline-block;
+    margin-left: 12px;
+    font-size: 22px;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+}
+.menu-botoes{
+    color: rgba(255, 255, 255, 0.2);
+    background-color: #ffffff00;
+    padding-left: 12px;
+    font-size: 22px;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+    letter-spacing: 2px;
+    display: inline-block;
+    font-weight: 100;
+    font-family: 'Montserrat', sans-serif;
+    border: 0;
+    padding-bottom: 5px;
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+.menu-botoes:hover {
+
+    color: #FED100;
+    transition: 0.3s;
+}
+
+.menu-botoes-canto{
+    color: rgba(255, 255, 255, 0.2);
+    background-color: #ffffff00;
+    padding-left: 150px;
+    font-size: 22px;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+    letter-spacing: 2px;
+    display: inline-block;
+    font-weight: 100;
+    font-family: 'Montserrat', sans-serif;
+    border: 0;
+    padding-bottom: 5px;
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+
 .banner{
     width: 100%;
 }
@@ -17,9 +80,14 @@ Pagina inicial
 }
 
 .logo {
-    width: 30%;
+    width: 20%;
     position: relative;
     margin: auto;
+}
+.icone-botoes{
+    width: 40px;
+    height: 40px;
+    padding-top: 20px;
 }
 
 h2 {

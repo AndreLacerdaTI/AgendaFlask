@@ -4,12 +4,17 @@
     <title>Search Results</title>
 </head>
 <body>
-    <label for="search_results">Nome:</label>
-    <input type="text" name="search_results" id="search_results" value="{{ search_results }}" required>
-    <label for="resultado_ramal">Resultado:</label>
-    <input type="text" name="resultado_ramal" id="resultado_ramal" value="{{ resultado_ramal }}" required>
-    <form method="post" action="{{ url_for('search_term') }}">
+    <form method="post" action="{{ url_for('salvar_alteracao') }}">
+        <label for="search_results">Nome anterior {{ search_results }}</label>
+        <input type="text" name="search_results" id="search_results" value="{{ search_results }}" required>
+        <label for="resultado_ramal">Resultado:</label>
+        <input type="text" name="resultado_ramal" id="resultado_ramal" value="{{ resultado_ramal }}" required>
         <button>Finalizar alteração</button>
+    </form>
+    <form method="post" action="{{ url_for('excluir') }}">
+        <input type="text" name="search_results" id="search_results" value="{{ search_results }}" required>
+        <input type="text" name="resultado_ramal" id="resultado_ramal" value="{{ resultado_ramal }}" required>
+        <button>Excluir</button>
     </form>
     {% if mensagemRetorno %}
             <p class="mensagem-retorno">{{mensagemRetorno}}</p>
