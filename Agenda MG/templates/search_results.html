@@ -1,23 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Search Results</title>
+    <meta charset="UTF-8">
+    <title>Editar ramal</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleEdit.css') }}">
+</head>
 </head>
 <body>
-    <form method="post" action="{{ url_for('salvar_alteracao') }}">
-        <label for="search_results">Nome anterior {{ search_results }}</label>
-        <input type="text" name="search_results" id="search_results" value="{{ search_results }}" required>
-        <label for="resultado_ramal">Resultado:</label>
-        <input type="text" name="resultado_ramal" id="resultado_ramal" value="{{ resultado_ramal }}" required>
-        <button>Finalizar alteração</button>
+    <form class="form-voltar" method="post" action="{{ url_for('admin') }}">
+        <button class="voltar-agenda">Voltar</button>
     </form>
-    <form method="post" action="{{ url_for('excluir') }}">
-        <input type="text" name="search_results" id="search_results" value="{{ search_results }}" required>
-        <input type="text" name="resultado_ramal" id="resultado_ramal" value="{{ resultado_ramal }}" required>
-        <button>Excluir</button>
-    </form>
-    {% if mensagemRetorno %}
-            <p class="mensagem-retorno">{{mensagemRetorno}}</p>
-    {% endif %}
+    <div class="login">
+        <form method="post" action="{{ url_for('salvar_alteracao') }}">
+            <h1 class="active" name="tipo" value={{tipo}}>Editar Ramal {{tipo}}</h1><br>
+            <h3>Antigo</h3>
+            <h3>Novo &nbsp &nbsp </h3><br>
+            <label for="tipo_ramal">Ramal</label>
+            <div class="input-bloco">
+                <input class="input-disabled" type="text" name="tipo_ramal" value="{{ tipo_ramal }}" readonly>
+            </div>
+            <label for="search_results">Nome</label>
+            <div class="input-bloco">
+                <input class="input-disabled" type="text" name="search_results"  value="{{ search_results }}" disabled>
+                <input class="input-enabled" type="text" name="search_results" value="{{ search_results }}" required>
+            </div>
+            <div class="espacamento">&nbsp</div>
+            <label for="resultado_ramal">Ramal:</label>
+            <div class="input-bloco">
+                <input class="input-disabled" type="text" name="resultado_ramal" id="resultado_ramal" value="{{ resultado_ramal }}" disabled>
+                <input class="input-enabled" type="text" name="resultado_ramal"  value="{{ resultado_ramal }}" required>
+            </div>
+            <div class="espacamento">&nbsp</div>
+            <div class="input-bloco">
+                <button class="botao-cadastrar" name="action" value="cadastrar">Salvar</button>
+                <button class="botao-excluir" name="action" value="excluir">Excluir</button>
+            </div>
+            {% if mensagemRetorno %}
+                <p class="mensagem-retorno">{{mensagemRetorno}}</p>
+            {% endif %}
+        </form>
+    </div>
 </body>
 </html>

@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Search Form</title>
+    <meta charset="UTF-8">
+    <title>Procurar ramal</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleEdit.css') }}">
 </head>
 <body>
-    <form method="post" action="{{ url_for('search') }}">
-        <label for="busca_term">Search:</label>
-        <input type="text" name="busca_term" id="busca_term">
-        <button type="submit">Buscar</button>
+    <form class="form-voltar" method="post" action="{{ url_for('admin') }}">
+        <button class="voltar-agenda">Voltar</button>
     </form>
+    <div class="login">
+        <h1 class="active">Buscar ramal</h1>
+        <form method="post" action="{{ url_for('search') }}">
+            <label for="busca_term">Pesquisar:</label>
+            <input type="text" placeholder="Digite o nome ou ramal" name="busca_term" id="busca_term"><br>
+            <button type="submit" class="botao-cadastrar">Buscar</button>
+        </form>
+    </div>
 </body>
 </html>

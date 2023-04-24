@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda de Ramais - MG</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleEdit.css') }}">
+</head>
+<body>
+    <form class="form-voltar" method="post" action="{{ url_for('abrirAgenda') }}">
+        <button class="voltar-agenda">Voltar</button>
+    </form>
+    <div class="login">
+        <h1>Login</h1>
+        <form method="post" action="{{ url_for('validarLogin') }}">
+            <label for="usuario">Usuário</label>
+            <div class="input-center">
+                <input type="text" id="usuario" name="usuario" required><br><br>
+            </div>
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" required><br><br>
+            <button type="submit" class="botao-cadastrar">Entrar</button>
+        </form>
+        {% if mensagemRetorno %}
+                <p class="mensagem-retorno">{{mensagemRetorno}}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

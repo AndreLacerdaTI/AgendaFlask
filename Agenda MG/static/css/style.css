@@ -8,29 +8,42 @@ Pagina inicial
     display: none;
 }
 }
-
 .menu {
+    width: 100%;
+    display: inline-block;
+    position: relative;
+}
+
+.menu-esquerda {
     color: #000000;
     background-color: #363636;
-    width: 100%;
+    width: 80%;
     height: 60px;
-    position: relative;
     text-align: center;
-    border-radius: 24px;
+    border-radius: 24px 0px 0px 24px;
+    float: left;
 }
 .menu-direita {
     color: #000000;
     background-color: #363636;
-    width: 100%;
+    width: 20%;
     height: 60px;
-    position: relative;
     text-align: center;
-    border-radius: 24px;
+    border-radius: 0px 24px 24px 0px;
+    float: left;
 }
 
 .botao-atual{
     color: #ffffff;
     border-bottom: 2px solid #FED100;
+    display:inline-block;
+    margin-left: 12px;
+    font-size: 22px;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+}
+.espaco-botao{
+    color: #ffffff;
     display:inline-block;
     margin-left: 12px;
     font-size: 22px;
@@ -80,11 +93,11 @@ Pagina inicial
     width: 100%;
 }
 .imagem-original{
-    width: 80%;
+    width: 100%;
     height: 500px;
 }
 .imagem-alternativa{
-    width: 80%;
+    width: 100%;
     height: 500px;
 }
 

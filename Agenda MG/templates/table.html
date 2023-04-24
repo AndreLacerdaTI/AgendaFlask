@@ -7,12 +7,19 @@
 </head>
 <body>
     <center><img class="logo" src="{{ url_for('static', filename='images/ai.png') }}"></center>
-    <div class="menu" id="esconder">
+    <div class="menu-esquerda" id="esconder">
         <form class="menu-botoes" method="post" id="esconder" action="{{ url_for('home') }}">
             <button class="menu-botoes">Home</button>
         </form>
         <h1 class="botao-atual">Agenda</h1>
-        <button class="menu-botoes-canto" id="esconder" onclick="window.print()">Imprimir</button>
+        <form class="menu-botoes" method="post" action="{{ url_for('filtrarAgenda') }}">
+            <input type="text" id="pesquisar" name="pesquisar">
+            <button class="menu-botoes">Buscar</button>
+        </form>
+    </div>
+    <div class="menu-direita" id="esconder">
+        <h1 class="espaco-botao">&nbsp</h1>
+        <button class="menu-botoes" id="esconder" onclick="window.print()">Imprimir</button>
     </div>
     <h1></h1>
     <h2 class="titulo-interno">RAMAL INTERNO</h2>

@@ -134,12 +134,30 @@ def search():
             if(i[0]==nome):
                 validador = 1
                 print("Nome encontrado no banco")
-                return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]))
+                return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='interno')
             if(i[1]==ramal):
                 validador = 1
                 print("Ramal encontrado no banco")
-                return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]))
+                return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='interno')
 
+        import sqlite3
+        conexao = sqlite3.connect('agenda.db')
+        c = conexao.cursor()
+        c.execute('SELECT nome, ramal FROM agendaDireta')
+        ramais = c.fetchall()
+        conexao.close()
+        validador = 0
+        for i in ramais:
+            #print('Ramal cadastrado: '+(i[1])+'Ramal novo:'+ramal)
+            print(i[1])
+            if(i[0]==nome):
+                validador = 1
+                print("Nome encontrado no banco")
+                return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='direto')
+            if(i[1]==ramal):
+                validador = 1
+                print("Ramal encontrado no banco")
+                return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='direto')
         print(validador)
 
 
@@ -151,43 +169,51 @@ def search():
     # If a GET request is received, render the search form template
     return render_template('search_form.html')
 
+
 @app.route('/salvar_alteracao', methods=['POST'])
 def salvar_alteracao():
-    conexao = sqlite3.connect('agenda.db')
+    tipo_ramal = request.form['tipo_ramal']
+    if request.form['action'] == 'cadastrar':
+        conexao = sqlite3.connect('agenda.db')
+        c = conexao.cursor()
+        search_results = request.form['search_results']
+        resultado_ramal = request.form['resultado_ramal']
+        nome = search_results
+        ramal = int(resultado_ramal)
+        if (tipo_ramal=='interno'):
+            c.execute('UPDATE agendaInterna SET nome = ?, ramal = ? WHERE ramal = ?', (nome, ramal, ramal))
+            conexao.commit()
+            conexao.close()
+            retorno = 'Ramal Interno: '+str(ramal)+' - '+nome+' alterado com sucesso!'
+            return render_template('admin.html', mensagemRetorno=retorno)
+        elif(tipo_ramal=='direto'):
+            c.execute('UPDATE agendaDireta SET nome = ?, ramal = ? WHERE ramal = ?', (nome, ramal, ramal))
+            conexao.commit()
+            conexao.close()
+            retorno = 'Ramal Direto: '+str(ramal)+' - '+nome+' alterado com sucesso!'
+            return render_template('admin.html', mensagemRetorno=retorno)
+    elif request.form['action'] == 'excluir':
+        conexao = sqlite3.connect('agenda.db')
+        search_results = request.form['search_results']
+        resultado_ramal = request.form['resultado_ramal']
+        nome = search_results
+        ramal = int(resultado_ramal)
+        if(tipo_ramal=='interno'):
+            c = conexao.cursor()
+            c.execute("DELETE FROM agendaInterna WHERE ramal=?", (ramal,))
+            conexao.commit()
+            conexao.close()
 
-    search_results = request.form['search_results']
-    resultado_ramal = request.form['resultado_ramal']
-    nome = search_results
-    ramal = int(resultado_ramal)
+            retorno = 'Ramal Interno: '+str(ramal)+' - '+nome+' excluido com sucesso!'
+            return render_template('admin.html', mensagemRetorno=retorno)
+        if(tipo_ramal=='direto'):
+            c = conexao.cursor()
+            c.execute("DELETE FROM agendaDireta WHERE ramal=?", (ramal,))
+            conexao.commit()
+            conexao.close()
 
-
-    c = conexao.cursor()
-    c.execute('UPDATE agendaInterna SET nome = ?, ramal = ? WHERE ramal = ?', (nome, ramal, ramal))
-    conexao.commit()
-    conexao.close()
-
-    retorno = 'Ramal Interno: '+str(ramal)+' - '+nome+' alterado com sucesso!'
-    return render_template('search_results.html', mensagemRetorno=retorno)
-
-@app.route('/excluir', methods=['POST'])
-def excluir():
-    conexao = sqlite3.connect('agenda.db')
-
-    search_results = request.form['search_results']
-    resultado_ramal = request.form['resultado_ramal']
-    nome = search_results
-    ramal = int(resultado_ramal)
-
-
-    c = conexao.cursor()
-    c.execute("DELETE FROM agendaInterna WHERE ramal=?", (ramal,))
-    conexao.commit()
-    conexao.close()
-
-    retorno = 'Ramal Interno: '+str(ramal)+' - '+nome+' excluido com sucesso!'
-    return render_template('search_results.html', mensagemRetorno=retorno)
-
-
+            retorno = 'Ramal Direto: '+str(ramal)+' - '+nome+' excluido com sucesso!'
+            return render_template('admin.html', mensagemRetorno=retorno)
 @app.route('/abrirAgenda', methods=['POST'])
 def abrirAgenda():
     # Importando agenda interna
@@ -203,6 +229,31 @@ def abrirAgenda():
     rows2 = c.fetchall()
     return render_template('table.html', rows=rows, rows2=rows2)
 
+@app.route('/filtrarAgenda', methods=['POST'])
+def filtrarAgenda():
+    minha_string = "Olá, mundo!"
+    nova_string = minha_string.upper()
+    return render_template('table.html')
+    #return render_template('table.html', rows=rows, rows2=rows2)
 
+
+@app.route('/login', methods=['POST'])
+def login():
+    print('login')
+    return render_template('login.html')
+
+@app.route('/validarLogin', methods=['POST'])
+def validarLogin():
+    usuario = request.form['usuario']
+    senha = request.form['senha']
+    if (usuario=='Andre Lacerda')and(senha=='segurancadeti'):
+        return render_template('admin.html', nome=usuario)
+    else:
+        return render_template('login.html',mensagemRetorno='Usuario ou senha incorreto')
+
+@app.route('/admin', methods=['POST'])
+def admin():
+    return render_template('admin.html')
 if __name__ == '__main__':
-    app.run(host='192.168.20.125')
+    #app.run(host='192.168.20.125')
+    app.run(debug=True)
