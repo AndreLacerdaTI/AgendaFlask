@@ -231,9 +231,18 @@ def abrirAgenda():
 
 @app.route('/filtrarAgenda', methods=['POST'])
 def filtrarAgenda():
-    minha_string = "Olá, mundo!"
-    nova_string = minha_string.upper()
-    return render_template('table.html')
+    pesquisar = request.form['pesquisar']
+    import sqlite3
+    conexao = sqlite3.connect('agenda.db')
+    c = conexao.cursor()
+    c.execute("SELECT nome, ramal FROM agendaInterna WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (pesquisar,pesquisar))
+    ramais = c.fetchall()
+    c.execute("SELECT nome, ramal FROM agendaDireta WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (pesquisar,pesquisar))
+    ramais2 = c.fetchall()
+    conexao.close()
+    #minha_string = "Olá, mundo!"
+    #nova_string = minha_string.upper()
+    return render_template('table.html', rows=ramais, rows2=ramais2)
     #return render_template('table.html', rows=rows, rows2=rows2)
 
 

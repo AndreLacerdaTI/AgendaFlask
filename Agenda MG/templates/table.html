@@ -12,14 +12,19 @@
             <button class="menu-botoes">Home</button>
         </form>
         <h1 class="botao-atual">Agenda</h1>
-        <form class="menu-botoes" method="post" action="{{ url_for('filtrarAgenda') }}">
-            <input type="text" id="pesquisar" name="pesquisar">
-            <button class="menu-botoes">Buscar</button>
-        </form>
     </div>
     <div class="menu-direita" id="esconder">
         <h1 class="espaco-botao">&nbsp</h1>
         <button class="menu-botoes" id="esconder" onclick="window.print()">Imprimir</button>
+        <button class="menu-botoes-direita" id="esconder" onclick="window.print()">
+            <img class="icone-botao" src="{{ url_for('static', filename='images/icone-impressora2.png') }}">
+        </button>
+        <form class="menu-botoes" method="post" action="{{ url_for('filtrarAgenda') }}">
+            <input class="menu-input" type="text" id="pesquisar" name="pesquisar">
+            <button class="menu-botoes-pesquisa">
+                <img class="icone-botao" src="{{ url_for('static', filename='images/icone-pesquisa.png') }}">
+            </button>
+        </form>
     </div>
     <h1></h1>
     <h2 class="titulo-interno">RAMAL INTERNO</h2>

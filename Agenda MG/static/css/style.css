@@ -17,7 +17,7 @@ Pagina inicial
 .menu-esquerda {
     color: #000000;
     background-color: #363636;
-    width: 80%;
+    width: 50%;
     height: 60px;
     text-align: center;
     border-radius: 24px 0px 0px 24px;
@@ -26,9 +26,9 @@ Pagina inicial
 .menu-direita {
     color: #000000;
     background-color: #363636;
-    width: 20%;
+    width: 50%;
     height: 60px;
-    text-align: center;
+    text-align: right;
     border-radius: 0px 24px 24px 0px;
     float: left;
 }
@@ -54,15 +54,14 @@ Pagina inicial
     color: rgba(255, 255, 255, 0.2);
     background-color: #ffffff00;
     padding-left: 12px;
+    padding-right: 12px;
     font-size: 22px;
     text-transform: uppercase;
-    padding-bottom: 5px;
     letter-spacing: 2px;
     display: inline-block;
     font-weight: 100;
     font-family: 'Montserrat', sans-serif;
     border: 0;
-    padding-bottom: 5px;
     letter-spacing: 2px;
     cursor: pointer;
 }
@@ -87,6 +86,50 @@ Pagina inicial
     padding-bottom: 5px;
     letter-spacing: 2px;
     cursor: pointer;
+}
+
+.menu-botoes-direita{
+    color: rgba(255, 255, 255, 0.2);
+    background-color: #ffffff00;
+padding: 12px;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: inline-block;
+    font-weight: 100;
+    font-family: 'Montserrat', sans-serif;
+    border: 0;
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+
+.menu-input{
+    border: none;
+    height: 30px;
+    width: 300px;
+    border-radius: 20px;
+    background: rgba(130, 130, 130, 0.348);
+    border: 2px solid rgba(255, 255, 255, 0);
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+}
+.menu-botoes-pesquisa {
+    margin-left: 0px;
+    height: 100%;
+    color: rgba(130, 130, 130, 0.348);
+    background-color: #ffffff00;
+    cursor: pointer;
+    border: 0px;
+    transition: 0.5s;
+}
+.menu-botoes-pesquisa:hover{
+    scale: 1.5;
+}
+.icone-botao{
+    width: 30px; 
+    height: auto;
 }
 
 .banner{
