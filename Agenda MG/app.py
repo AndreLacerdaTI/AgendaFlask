@@ -232,19 +232,25 @@ def abrirAgenda():
 @app.route('/filtrarAgenda', methods=['POST'])
 def filtrarAgenda():
     pesquisar = request.form['pesquisar']
+    filtros = pesquisar.split()
+    print(filtros)
     import sqlite3
     conexao = sqlite3.connect('agenda.db')
     c = conexao.cursor()
     c.execute("SELECT nome, ramal FROM agendaInterna WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (pesquisar,pesquisar))
     ramais = c.fetchall()
-    c.execute("SELECT nome, ramal FROM agendaDireta WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (pesquisar,pesquisar))
+    #c.execute("SELECT nome, ramal FROM agendaDireta WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (pesquisar,pesquisar))
+    #sql = "SELECT nome, ramal FROM agendaDireta WHERE nome LIKE %s OR ramal LIKE %s OR setor LIKE %s"
+    
+    #sql = "SELECT nome, ramal FROM agendaDireta WHERE nome LIKE '%'|| ? ||'%' OR ramal LIKE '%' || ? || '%'"
+    #params = (filtros,filtros)
+    c.execute(sql, params)
     ramais2 = c.fetchall()
     conexao.close()
     #minha_string = "Olá, mundo!"
     #nova_string = minha_string.upper()
-    return render_template('table.html', rows=ramais, rows2=ramais2)
+    return render_template('table.html', rows=ramais, rows2=ramais2,filtros=pesquisar)
     #return render_template('table.html', rows=rows, rows2=rows2)
-
 
 @app.route('/login', methods=['POST'])
 def login():

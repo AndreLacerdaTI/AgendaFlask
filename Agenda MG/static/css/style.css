@@ -10,7 +10,6 @@ Pagina inicial
 }
 .menu {
     width: 100%;
-    display: inline-block;
     position: relative;
 }
 
@@ -27,10 +26,12 @@ Pagina inicial
     color: #000000;
     background-color: #363636;
     width: 50%;
-    height: 60px;
+    height: 50px;
     text-align: right;
     border-radius: 0px 24px 24px 0px;
-    float: left;
+    display: inline-block;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .botao-atual{
@@ -65,71 +66,99 @@ Pagina inicial
     letter-spacing: 2px;
     cursor: pointer;
 }
+
+.menu-form{
+    display: inline-block;
+    width: 80%;
+}
+
 .menu-botoes:hover {
-
-    color: #FED100;
+    color: #ffffff;
+    font-weight: bold;
     transition: 0.3s;
-}
-
-.menu-botoes-canto{
-    color: rgba(255, 255, 255, 0.2);
-    background-color: #ffffff00;
-    padding-left: 150px;
-    font-size: 22px;
-    text-transform: uppercase;
-    padding-bottom: 5px;
-    letter-spacing: 2px;
-    display: inline-block;
-    font-weight: 100;
-    font-family: 'Montserrat', sans-serif;
-    border: 0;
-    padding-bottom: 5px;
-    letter-spacing: 2px;
-    cursor: pointer;
-}
-
-.menu-botoes-direita{
-    color: rgba(255, 255, 255, 0.2);
-    background-color: #ffffff00;
-padding: 12px;
-    font-size: 22px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    display: inline-block;
-    font-weight: 100;
-    font-family: 'Montserrat', sans-serif;
-    border: 0;
-    letter-spacing: 2px;
-    cursor: pointer;
 }
 
 .menu-input{
     border: none;
+    display:inline;
     height: 30px;
-    width: 300px;
-    border-radius: 20px;
-    background: rgba(130, 130, 130, 0.348);
-    border: 2px solid rgba(255, 255, 255, 0);
+    width: 30%;
+    background: rgba(130, 130, 130, 0);
+    border-bottom: 2px solid rgb(255, 255, 255);
     overflow: hidden;
     transition: all 0.5s ease-in-out;
     font-family: 'Montserrat', sans-serif;
     text-align: center;
+    text-justify: auto;
+    color: #ffffff;
+    font-size: 15px;
+    margin-bottom: 10px;
 }
-.menu-botoes-pesquisa {
-    margin-left: 0px;
-    height: 100%;
+.menu-input:focus{
+    width: 75%;
+    color: #ffffff;
+    border: none;
+    border-bottom: 2px solid rgb(255, 255, 255);
+    outline: none;
+    font-size: 18px;
+}
+.menu-botoes-direita {
+    height: auto;
+    width: 20%;
+    padding-top: 10px;
     color: rgba(130, 130, 130, 0.348);
     background-color: #ffffff00;
     cursor: pointer;
     border: 0px;
     transition: 0.5s;
 }
-.menu-botoes-pesquisa:hover{
-    scale: 1.5;
+.menu-botoes-direita:hover{
+    scale: 1.2;
+}
+.menu-botao-imp {
+    height: auto;
+    width: 10%;
+    color: rgba(130, 130, 130, 0.348);
+    background-color: #ffffff00;
+    cursor: pointer;
+    border: 0px;
+    transition: 0.5s;
+}
+.menu-botao-imp:hover{
+    scale: 1.2;
 }
 .icone-botao{
     width: 30px; 
     height: auto;
+}
+
+.filtros{
+    background-color: #363636;
+    border-radius: 20px;
+    border: 0px;
+    height: 40px;
+    width: 100px;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    text-align: right;
+    font-weight: bold;
+    transition: 0.3s;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.filtros:hover{
+    background-color: #FED100;
+    color: #FED100;
+    font-size: 0px;
+    text-align: center;
+}
+
+.icone-fechar{
+    width: 15px;
+    height: auto;
+    align-items: right;
 }
 
 .banner{
