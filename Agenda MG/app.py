@@ -1,5 +1,5 @@
 import sqlite3
-from jinja2 import Template
+#from jinja2 import Template
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -7,7 +7,9 @@ app = Flask(__name__)
 # rota principal
 @app.route('/')
 def index():
-    return render_template('index.html')
+    image_url = '/static/images/ai.png'
+    return render_template('carrossel.html', image_url=image_url)
+    #return render_template('index.html')
 
 @app.route('/home', methods=['POST'])
 def home():
@@ -113,6 +115,13 @@ def paginaCadastroDireto():
 def search_term():
     return render_template('search_form.html')
 
+def eh_int(string):
+    try:
+        int(string)
+        return True
+    except ValueError:
+        return False
+
 # Abrindo a pagina de resultado
 @app.route('/search',  methods=['POST'])
 def search():
@@ -120,56 +129,107 @@ def search():
         # Get the search term from the form data
         busca_term = request.form['busca_term']
         nome = busca_term
-        ramal = int(busca_term)
-
+        if eh_int(busca_term):
+            ramal = int(busca_term)
+        else:
+            ramal = ''
         import sqlite3
         conexao = sqlite3.connect('agenda.db')
         c = conexao.cursor()
         c.execute('SELECT nome, ramal FROM agendaInterna')
         ramais = c.fetchall()
-        conexao.close()
-        validador = 0
+        #conexao.close()
+        encontrados = 0
+        tipos = []
+        listaRamaisI = []
+        listaRamaisD = []
         for i in ramais:
             #print('Ramal cadastrado: '+(i[1])+'Ramal novo:'+ramal)
-            print(i[1])
             if(i[0]==nome):
-                validador = 1
+                encontrados = encontrados+1
+                tipos.append('interno')
                 print("Nome encontrado no banco")
-                return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='interno')
+                listaRamaisI.append(i)
+                #return render_template('search_select.html')
+                #return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='interno')
             if(i[1]==ramal):
-                validador = 1
+                encontrados = encontrados+1
+                tipos.append('interno')
                 print("Ramal encontrado no banco")
-                return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='interno')
-
-        import sqlite3
-        conexao = sqlite3.connect('agenda.db')
-        c = conexao.cursor()
+                listaRamaisI.append(i)
+                #return render_template('search_select.html')
+                #return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='interno')
         c.execute('SELECT nome, ramal FROM agendaDireta')
         ramais = c.fetchall()
         conexao.close()
-        validador = 0
         for i in ramais:
             #print('Ramal cadastrado: '+(i[1])+'Ramal novo:'+ramal)
-            print(i[1])
             if(i[0]==nome):
-                validador = 1
+                encontrados = encontrados+1
+                tipos.append('direto')
                 print("Nome encontrado no banco")
-                return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='direto')
+                listaRamaisD.append(i)
+                #return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='direto')
             if(i[1]==ramal):
-                validador = 1
+                encontrados = encontrados+1
+                tipos.append('direto')
                 print("Ramal encontrado no banco")
-                return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='direto')
-        print(validador)
+                listaRamaisD.append(i)
+                #return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='direto')
 
+    if (encontrados==0):
+        return render_template('search_form.html')
+    elif (encontrados==1):
+        if(tipos[0]=='interno'):
+            import sqlite3
+            conexao = sqlite3.connect('agenda.db')
+            c = conexao.cursor()
+            c.execute('SELECT nome, ramal FROM agendaInterna')
+            ramais = c.fetchall()
+            conexao.close()
+            for i in ramais:
+                #print('Ramal cadastrado: '+(i[1])+'Ramal novo:'+ramal)
+                if(i[0]==nome):
+                    print("ENVIANDO")
+                    return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='interno')
+                if(i[1]==ramal):
+                    print("ENVIANDO")
+                    return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='interno')
+            #return render_template('search_results.html', search_results=str(ramais[]),resultado_ramal=str(ramais[]),tipo_ramal=tipos[0])
+        if(tipos[0]=='direto'):
+            import sqlite3
+            conexao = sqlite3.connect('agenda.db')
+            c = conexao.cursor()
+            c.execute('SELECT nome, ramal FROM agendaDireta')
+            ramais = c.fetchall()
+            conexao.close()
+            for i in ramais:
+                #print('Ramal cadastrado: '+(i[1])+'Ramal novo:'+ramal)
+                if(i[0]==nome):
+                    print("ENVIANDO")
+                    return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='direto')
+                if(i[1]==ramal):
+                    print("ENVIANDO")
+                    return render_template('search_results.html', search_results=str(i[0]),resultado_ramal=str(i[1]),tipo_ramal='direto')
+    elif (encontrados>1):
+        return render_template('search_select.html', rows=listaRamaisI, rows2=listaRamaisD)
+    return render_template('search_select.html')
 
+@app.route('/search_results_table',  methods=['POST'])
+def search_results_table():
+    dados = request.form['editar']
+    listaFiltros = dados.replace("(", "")
+    listaFiltros = listaFiltros.replace(")", "")
+    listaFiltros = listaFiltros.replace("[", "")
+    listaFiltros = listaFiltros.replace("]", "")
+    listaFiltros = listaFiltros.replace("'", "")
+    listaFiltros = listaFiltros.replace(" ", "")
+    listaFiltros = listaFiltros.split(",")
+    return render_template('search_results.html',search_results=str(listaFiltros[0]),resultado_ramal=str(listaFiltros[1]),tipo_ramal=listaFiltros[2])
 
-        # Search for the term in the list of items
-        #search_results = [item for item in items if busca_term in item]
-        # Render the search results template with the search results
-        #return render_template('search_results.html', search_results=search_results)
-    # If a GET request is received, render the search form template
-    return render_template('search_form.html')
-
+@app.route('/search_results',  methods=['POST'])
+def search_results():
+    return render_template('search_results.html')
 
 @app.route('/salvar_alteracao', methods=['POST'])
 def salvar_alteracao():
@@ -217,7 +277,6 @@ def salvar_alteracao():
             return render_template('admin.html', mensagemRetorno=retorno)
 @app.route('/abrirAgenda', methods=['POST'])
 def abrirAgenda():
-    filtros = []
     # Importando agenda interna
     conn = sqlite3.connect('agenda.db')
     cur = conn.cursor()
@@ -255,12 +314,53 @@ def filtrarAgenda():
 
 @app.route('/excluirFiltro', methods=['POST'])
 def excluirFiltro():
+    # O botão vai retornar uma string ['nomeExemplo',('nomeExemplo2','nomeExemplo3')]
+    # A string vai passar por todos os filtros para remover os caracteres e separar em uma lista
     filtros = request.form['filtro']
-    for i in filtros:
-        for o in i:
-            print(o)
-    print('Restante da lista:',filtros)
-    return render_template('table.html')
+    listaFiltros = filtros.replace("(", "")
+    listaFiltros = listaFiltros.replace(")", "")
+    listaFiltros = listaFiltros.replace("[", "")
+    listaFiltros = listaFiltros.replace("]", "")
+    listaFiltros = listaFiltros.replace("'", "")
+    listaFiltros = listaFiltros.replace(" ", "")
+    listaFiltros = listaFiltros.split(",")
+    # A primeira posição da lista é o filtro que será excluido
+    filtroExcluido = listaFiltros[0]
+    del listaFiltros[0]
+    # Agora vamos percorrer a lista buscando a posição do filtro para ser excluido
+    tamanhoLista = len(listaFiltros)
+    i=0
+    while (i<tamanhoLista):
+        if (listaFiltros[i]==filtroExcluido):
+            posicaoFiltroExcluido = i
+        i = i+1
+    # Deletando o filtro dentro da lista
+    del listaFiltros[posicaoFiltroExcluido]
+    for i in listaFiltros:
+        print('Restante da lista:',i)
+    print('tamanho da lista',len(listaFiltros))
+    # Filtrando novamente e retornando
+    if ((len(listaFiltros))>0):
+        print('entrou')
+        filtros = listaFiltros
+        ramaisFiltrados = []
+        ramaisFiltrados2 = []
+        import sqlite3
+        conexao = sqlite3.connect('agenda.db')
+        c = conexao.cursor()
+        for i in filtros:
+            c.execute("SELECT nome, ramal FROM agendaInterna WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (i,i))
+            ramaisFiltrados.append(c.fetchall())
+        for i in filtros:
+            c.execute("SELECT nome, ramal FROM agendaDireta WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (i,str(i)))
+            ramaisFiltrados2.append(c.fetchall())
+        conexao.close()
+        ramais = ramaisFiltrados
+        ramais2 = ramaisFiltrados2
+        return render_template('table.html', rows=ramais, rows2=ramais2,filtros=filtros,filtro='ativado')
+    else:
+        print('entrou')
+        return abrirAgenda()
 
 @app.route('/login', methods=['POST'])
 def login():

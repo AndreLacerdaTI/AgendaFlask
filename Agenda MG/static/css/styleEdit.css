@@ -135,6 +135,14 @@ input{
     display: inline;
 
 }
+.input-tipo{
+    width: 40%;
+    color: #ffffff;
+    background: rgba(63, 63, 63, 0.348);
+    border-radius: 20px;
+    display: inline;
+    text-transform: uppercase;
+}
 .input-center{
     text-align: center;
 }

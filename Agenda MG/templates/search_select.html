@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Selecionar ramal</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleSearch.css') }}">
+</head>
+<body>
+    <form class="form-voltar" method="post" action="{{ url_for('admin') }}">
+        <button class="voltar-agenda">Voltar</button>
+    </form>
+    <h1></h1>
+    <h2 class="titulo-interno">Selecionar ramal</h2>
+    <table class="tebela-interno">
+        <thead>
+            <tr>
+                <th class="titulo-nome">Nome</th>
+                <th class="titulo-central">Ramal</th>
+                <th class="titulo-central">Tipo</th>
+                <th class="titulo-ramal">Selecionar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                    <td>INTERNO</td>
+                    <td>
+                        <form method="post" action="{{ url_for('search_results_table') }}">
+                            <button class="botao-editar" name="editar" value="{{row[0],row[1],'interno'}}">
+                                <img class="icone-botao" src="{{ url_for('static', filename='images/icone-editar.png') }}">
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            {% for row in rows2 %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                    <td>DIRETO</td>
+                    <td>
+                        <form method="post" action="{{ url_for('search_results_table') }}">
+                            <button class="botao-editar" name="editar" value="{{row[0],row[1],'direto'}}">
+                                <img class="icone-botao" src="{{ url_for('static', filename='images/icone-editar.png') }}">
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td class="rodape-nome"> </td>
+                <td class="rodape-ramal"> </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
