@@ -25,13 +25,13 @@
         </button>
     </div>
     <h1></h1>
-    {% if filtros %}
-        <form class="menu-form" method="post" action="{{ url_for('abrirAgenda') }}">
-            <button class="filtros">{{filtros}}
+    {% for filtro in filtros %}
+        <form class="menu-form" method="post" action="{{ url_for('excluirFiltro') }}">
+            <button class="filtros" name="filtro" value="{{filtro,filtros}}">{{filtro}}
                 <img class="icone-fechar" src="{{ url_for('static', filename='images/icone-fechar.png') }}">
             </button>
         </form>
-    {% endif %}
+    {% endfor %}
     <h1></h1>
     <h2 class="titulo-interno">RAMAL INTERNO</h2>
     <h2 class="titulo-direto">RAMAL DIRETO</h2>
@@ -43,13 +43,25 @@
             </tr>
         </thead>
         <tbody>
-            {% for row in rows %}
-            <tr>
-                <td>{{ row[0] }}</td>
-                <td>{{ row[1] }}</td>
-            
-            </tr>
-            {% endfor %}
+            {% if filtro=='ativado' %}
+                {% for row in rows %}
+                    {% for i in row %}
+                    <tr>
+                        <td>{{ i[0] }}</td>
+                        <td>{{ i[1] }}</td>
+                    
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            {% if filtro=='desativado' %}
+                {% for row in rows %}
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
             <tr>
                 <td class="rodape-nome"> </td>
                 <td class="rodape-ramal"> </td>
@@ -65,12 +77,25 @@
             </tr>
         </thead>
         <tbody>
-            {% for row in rows2 %}
-            <tr>
-                <td>{{ row[0] }}</td>
-                <td>{{ row[1] }}</td>
-            </tr>
-            {% endfor %}
+            {% if filtro=='ativado' %}
+                {% for row in rows2 %}
+                    {% for i in row %}
+                    <tr>
+                        <td>{{ i[0] }}</td>
+                        <td>{{ i[1] }}</td>
+                    
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            {% if filtro=='desativado' %}
+                {% for row in rows2 %}
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
             <tr>
                 <td class="rodape-nome"> </td>
                 <td class="rodape-ramal"> </td>

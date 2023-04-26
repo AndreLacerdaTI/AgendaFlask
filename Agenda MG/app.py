@@ -1,4 +1,5 @@
 import sqlite3
+from jinja2 import Template
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -216,6 +217,7 @@ def salvar_alteracao():
             return render_template('admin.html', mensagemRetorno=retorno)
 @app.route('/abrirAgenda', methods=['POST'])
 def abrirAgenda():
+    filtros = []
     # Importando agenda interna
     conn = sqlite3.connect('agenda.db')
     cur = conn.cursor()
@@ -227,30 +229,38 @@ def abrirAgenda():
     c = conexao.cursor()
     c.execute('SELECT nome, ramal FROM agendaDireta ORDER BY nome')
     rows2 = c.fetchall()
-    return render_template('table.html', rows=rows, rows2=rows2)
+    return render_template('table.html', rows=rows, rows2=rows2, filtro='desativado')
 
 @app.route('/filtrarAgenda', methods=['POST'])
 def filtrarAgenda():
     pesquisar = request.form['pesquisar']
     filtros = pesquisar.split()
-    print(filtros)
+    listaFiltros = []
+    listaFiltros2 = []
     import sqlite3
     conexao = sqlite3.connect('agenda.db')
     c = conexao.cursor()
-    c.execute("SELECT nome, ramal FROM agendaInterna WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (pesquisar,pesquisar))
-    ramais = c.fetchall()
-    #c.execute("SELECT nome, ramal FROM agendaDireta WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (pesquisar,pesquisar))
-    #sql = "SELECT nome, ramal FROM agendaDireta WHERE nome LIKE %s OR ramal LIKE %s OR setor LIKE %s"
-    
-    #sql = "SELECT nome, ramal FROM agendaDireta WHERE nome LIKE '%'|| ? ||'%' OR ramal LIKE '%' || ? || '%'"
-    #params = (filtros,filtros)
-    c.execute(sql, params)
-    ramais2 = c.fetchall()
+    for i in filtros:
+        c.execute("SELECT nome, ramal FROM agendaInterna WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (i,i))
+        listaFiltros.append(c.fetchall())
+    for i in filtros:
+        c.execute("SELECT nome, ramal FROM agendaDireta WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (i,str(i)))
+        listaFiltros2.append(c.fetchall())
     conexao.close()
-    #minha_string = "Olá, mundo!"
-    #nova_string = minha_string.upper()
-    return render_template('table.html', rows=ramais, rows2=ramais2,filtros=pesquisar)
+    ramais = listaFiltros
+    ramais2 = listaFiltros2
+    print(listaFiltros)
+    return render_template('table.html', rows=ramais, rows2=ramais2,filtros=filtros,filtro='ativado')
     #return render_template('table.html', rows=rows, rows2=rows2)
+
+@app.route('/excluirFiltro', methods=['POST'])
+def excluirFiltro():
+    filtros = request.form['filtro']
+    for i in filtros:
+        for o in i:
+            print(o)
+    print('Restante da lista:',filtros)
+    return render_template('table.html')
 
 @app.route('/login', methods=['POST'])
 def login():
