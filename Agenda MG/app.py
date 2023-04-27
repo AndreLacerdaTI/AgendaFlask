@@ -1,15 +1,13 @@
 import sqlite3
 #from jinja2 import Template
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 
 app = Flask(__name__)
-
+app.secret_key = 'sua_chave_secreta'
 # rota principal
 @app.route('/')
 def index():
-    image_url = '/static/images/ai.png'
-    return render_template('carrossel.html', image_url=image_url)
-    #return render_template('index.html')
+    return render_template('index.html')
 
 @app.route('/home', methods=['POST'])
 def home():
@@ -365,20 +363,30 @@ def excluirFiltro():
 @app.route('/login', methods=['POST'])
 def login():
     print('login')
-    return render_template('login.html')
+    if 'logged_in' in session:
+        return render_template('admin.html')
+    else:
+        return render_template('login.html')
 
 @app.route('/validarLogin', methods=['POST'])
 def validarLogin():
     usuario = request.form['usuario']
     senha = request.form['senha']
     if (usuario=='Andre Lacerda')and(senha=='segurancadeti'):
+        session['logged_in'] = True
         return render_template('admin.html', nome=usuario)
     else:
+        session.pop('logged_in', None)
         return render_template('login.html',mensagemRetorno='Usuario ou senha incorreto')
 
 @app.route('/admin', methods=['POST'])
 def admin():
     return render_template('admin.html')
+@app.route('/logout', methods=['POST'])
+def logout():
+    session.pop('logged_in', None)
+    return render_template('index.html')
+
 if __name__ == '__main__':
     #app.run(host='192.168.20.125')
     app.run(debug=True)

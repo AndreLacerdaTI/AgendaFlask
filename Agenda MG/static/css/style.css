@@ -161,23 +161,6 @@ Pagina inicial
     align-items: right;
 }
 
-.banner{
-    display: inline-block;
-    text-align: center;
-    transition: 0.3s;
-}
-.botao-banner{
-    display: inline-block;
-    height: 30px;
-    width: 5%;
-
-    color: rgba(130, 130, 130, 0.502);
-    border-radius: 24px;
-    background-color: #000000;
-    cursor: pointer;
-    border: 0px;
-    transition: 0.5s;   
-}
 .imagem-original{
     width: 80%;
     height: auto;
@@ -212,6 +195,9 @@ h2 {
     border: 2px solid #FED100;
     width: 48%;
     float: left;
+}
+.titulo-principal{
+    width: 100%;
 }
 .titulo-direto{
     margin-left: 0.5%;

@@ -6,6 +6,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+      /* Estilos para o carrossel */
+      #carousel {
+        width: 100%;
+        height: auto;
+        overflow: hidden;
+      }
+  
+      #carousel img {
+        position: absolute;
+        top:auto;
+        left: 10%;
+        width: 80%;
+        height: auto;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+        border-radius: 24px;
+      }
+  
+      #carousel img.active {
+        opacity: 1;
+      }
+    </style>
 </head>
 <body>
   <center><img class="logo" src="{{ url_for('static', filename='images/ai.png') }}"></center>
@@ -23,5 +46,33 @@
       </form>
     </div>
   </div>
+  <h2 class="titulo-principal">ENDOMARKETING</h2>
+  <!-- Carrossel com imagens -->
+  <div id="carousel">
+    <img class="active" src="/static/images/imagem1.jpg" alt="Imagem 1">
+    <img src="/static/images/imagem2.jpg" alt="Imagem 2">
+    <img src="/static/images/imagem3.jpg" alt="Imagem 3">
+  </div>
+
+  <script>
+  var images = document.querySelectorAll("#carousel img"); // Seleciona todas as imagens
+  var currentIndex = 0; // Índice da imagem atual
+
+  function changeImage() {
+    var previousIndex = currentIndex;
+    currentIndex = (currentIndex + 1) % images.length;
+
+    // Remove a classe "active" da imagem anterior
+    images[previousIndex].classList.remove("active");
+    // Adiciona a classe "active" à próxima imagem
+    images[currentIndex].classList.add("active");
+
+    // Aguarda 5 segundos e chama a função novamente
+    setTimeout(changeImage, 5000);
+  }
+
+  // Inicia a troca de imagens com transição
+  setTimeout(changeImage, 5000);
+  </script>
 </body>
 </html>

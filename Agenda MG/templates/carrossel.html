@@ -1,30 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Carrossel de Imagens</title>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
-    <style>
-        .slick-slide img {
-            width: 100%;
-            height: auto;
-        }
-    </style>
+  <style>
+    /* Estilos para o carrossel */
+    #carousel {
+      width: 100%;
+      height: auto;
+      overflow: hidden;
+    }
+
+    #carousel img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    #carousel img.active {
+      opacity: 1;
+    }
+  </style>
 </head>
 <body>
-    <div class="carousel">
-        <img src="{{ image_url }}"" alt="Imagem">
-        {{image_url}}
-        {% for image in images %}
-            <div><img src="{{ image }}" alt=""></div>
-        {% endfor %}
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $('.carousel').slick();
-        });
-    </script>
+<!-- Carrossel com imagens -->
+<div id="carousel">
+  <img class="active" src="/static/images/imagem1.jpg" alt="Imagem 1">
+  <img src="/static/images/imagem2.jpg" alt="Imagem 2">
+  <img src="/static/images/imagem3.jpg" alt="Imagem 3">
+</div>
+
+<script>
+var images = document.querySelectorAll("#carousel img"); // Seleciona todas as imagens
+var currentIndex = 0; // Índice da imagem atual
+
+function changeImage() {
+  var previousIndex = currentIndex;
+  currentIndex = (currentIndex + 1) % images.length;
+
+  // Remove a classe "active" da imagem anterior
+  images[previousIndex].classList.remove("active");
+  // Adiciona a classe "active" à próxima imagem
+  images[currentIndex].classList.add("active");
+
+  // Aguarda 5 segundos e chama a função novamente
+  setTimeout(changeImage, 5000);
+}
+
+// Inicia a troca de imagens com transição
+setTimeout(changeImage, 5000);
+</script>
+
 </body>
 </html>
