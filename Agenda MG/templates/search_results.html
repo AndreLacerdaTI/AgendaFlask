@@ -7,10 +7,12 @@
 </head>
 </head>
 <body>
-    <form class="form-voltar" method="post" action="{{ url_for('admin') }}">
-        <button class="voltar-agenda">Voltar</button>
-    </form>
     <div class="login">
+        <form class="form-voltar" method="post" action="{{ url_for('admin') }}">
+            <button class="voltar-agenda">
+                <img class="icone-voltar" src="{{ url_for('static', filename='images/icone-voltar.png') }}">
+            </button>
+        </form>
         <form method="post" action="{{ url_for('salvar_alteracao') }}">
             <h1 class="active" name="tipo" value={{tipo}}>Editar Ramal {{tipo}}</h1><br>
             <h3>Antigo</h3>

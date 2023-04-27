@@ -42,18 +42,22 @@
     <div class="menu-direita">
       <form class="menu-botoes" method="post" action="{{ url_for('login') }}">
         <h1 class="espaco-botao">&nbsp</h1>
-        <button class="menu-botoes">Login</button>
+        <button class="menu-botoes-direita">
+          <img class="icone-botao" src="{{ url_for('static', filename='images/icone-config.png') }}">
+        </button>
+        <h1 class="espaco-botao">&nbsp</h1>
       </form>
     </div>
   </div>
   <h2 class="titulo-principal">ENDOMARKETING</h2>
   <!-- Carrossel com imagens -->
   <div id="carousel">
-    <img class="active" src="/static/images/imagem1.jpg" alt="Imagem 1">
-    <img src="/static/images/imagem2.jpg" alt="Imagem 2">
-    <img src="/static/images/imagem3.jpg" alt="Imagem 3">
+    <img class="active" src="/static/images/Banners/imagem1.png" alt="Imagem 1">
+    <img src="/static/images/Banners/imagem2.png" alt="Imagem 2">
+    <img src="/static/images/Banners/imagem3.jpg" alt="Imagem 3">
+    <img src="/static/images/Banners/imagem4.jpg" alt="Imagem 4">
   </div>
-
+  <h1></h1>
   <script>
   var images = document.querySelectorAll("#carousel img"); // Seleciona todas as imagens
   var currentIndex = 0; // Índice da imagem atual

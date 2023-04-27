@@ -6,10 +6,12 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleEdit.css') }}">
 </head>
 <body>
-    <form class="form-voltar" method="post" action="{{ url_for('admin') }}">
-        <button class="voltar-agenda">Voltar</button>
-    </form>
     <div class="login">
+        <form class="form-voltar" method="post" action="{{ url_for('admin') }}">
+            <button class="voltar-agenda">
+                <img class="icone-voltar" src="{{ url_for('static', filename='images/icone-voltar.png') }}">
+            </button>
+        </form>
         <h1>Cadastrar Ramal</h1>
         <h2 class="active"> Interno </h2>
         <form class="botao-trocar" method="post" action="{{ url_for('paginaCadastroDireto') }}">

@@ -8,10 +8,12 @@
     <title>Admin</title>
 </head>
 <body>
-    <form class="form-voltar" method="post" action="{{ url_for('abrirAgenda') }}">
-        <button class="voltar-agenda">Voltar</button>
-    </form>
     <div class="login">
+        <form class="form-voltar" method="post" action="{{ url_for('abrirAgenda') }}">
+            <button class="voltar-agenda">
+                <img class="icone-voltar" src="{{ url_for('static', filename='images/icone-voltar.png') }}">
+            </button>
+        </form>
         {% if nome %}
             <h1 class="mensagem">Bem vindo {{nome}}!</h1>
         {% endif %}
@@ -25,8 +27,11 @@
         <form method="post" action="{{ url_for('abrirAgenda') }}">
             <button type="submit" class="botao-cadastrar">Abrir agenda</button>
         </form><br>
+        <form method="post" action="{{ url_for('editarBanner') }}">
+            <button type="submit" class="botao-cadastrar">Editar Banners</button>
+        </form><br>
         <form method="post" action="{{ url_for('logout') }}">
-            <button type="submit" class="botao-cadastrar">Fazer logoff</button>
+            <button type="submit" class="botao-excluir">Logoff</button>
         </form>
         {% if mensagemRetorno %}
                 <p class="mensagem-retorno">{{mensagemRetorno}}</p>

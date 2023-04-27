@@ -24,15 +24,17 @@
             <img class="icone-botao" src="{{ url_for('static', filename='images/icone-impressora2.png') }}">
         </button>
     </div>
-    <h1></h1>
-    {% for filtro in filtros %}
-        <form class="menu-form" method="post" action="{{ url_for('excluirFiltro') }}">
-            <button class="filtros" name="filtro" value="{{filtro,filtros}}">{{filtro}}
-                <img class="icone-fechar" src="{{ url_for('static', filename='images/icone-fechar.png') }}">
-            </button>
-        </form>
-    {% endfor %}
-    <h1></h1>
+    <form class="menu-form" method="post" action="{{ url_for('excluirFiltro') }}">
+        {% if filtros %}
+            <h3 class="titulo-filtro">FILTRAR POR:
+                {% for filtro in filtros %}
+                    <button class="filtros" name="filtro" value="{{filtro,filtros}}">{{filtro}}
+                        <img class="icone-fechar" src="{{ url_for('static', filename='images/icone-fechar.png') }}">
+                    </button>
+                {% endfor %}
+            </h3>
+        {% endif %}
+    </form>
     <h2 class="titulo-interno">RAMAL INTERNO</h2>
     <h2 class="titulo-direto">RAMAL DIRETO</h2>
     <table class="tebela-interno">

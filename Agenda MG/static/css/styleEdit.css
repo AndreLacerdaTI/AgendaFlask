@@ -2,14 +2,30 @@ body{
     background-color: #bdbdbd;
 }
 
+.form-voltar{
+    position: absolute;
+    left: 10px;
+    top: 15px;
+}
+
+.icone-voltar {
+    width: 30px;
+    height: auto;
+}
+
 .voltar-agenda{
-    color: #505050;
+    color: #ffffff;
     font-size: 20px;
     font-family: 'Montserrat', sans-serif;
+    transition: 0.3s;
+}
+.voltar-agenda:hover{
+    scale: 1.2;
 }
 
 .botao-trocar{
     display: inline-block;
+    text-align: left;
 }
 
 button {

@@ -1,6 +1,7 @@
 import sqlite3
 #from jinja2 import Template
 from flask import Flask, render_template, request, session
+import os
 
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta'
@@ -291,24 +292,28 @@ def abrirAgenda():
 @app.route('/filtrarAgenda', methods=['POST'])
 def filtrarAgenda():
     pesquisar = request.form['pesquisar']
-    filtros = pesquisar.split()
-    listaFiltros = []
-    listaFiltros2 = []
-    import sqlite3
-    conexao = sqlite3.connect('agenda.db')
-    c = conexao.cursor()
-    for i in filtros:
-        c.execute("SELECT nome, ramal FROM agendaInterna WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (i,i))
-        listaFiltros.append(c.fetchall())
-    for i in filtros:
-        c.execute("SELECT nome, ramal FROM agendaDireta WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (i,str(i)))
-        listaFiltros2.append(c.fetchall())
-    conexao.close()
-    ramais = listaFiltros
-    ramais2 = listaFiltros2
-    print(listaFiltros)
-    return render_template('table.html', rows=ramais, rows2=ramais2,filtros=filtros,filtro='ativado')
-    #return render_template('table.html', rows=rows, rows2=rows2)
+    if (pesquisar==''):
+        print('Consulta vazia')
+    else:
+        filtros = pesquisar.split()
+        listaFiltros = []
+        listaFiltros2 = []
+        import sqlite3
+        conexao = sqlite3.connect('agenda.db')
+        c = conexao.cursor()
+        for i in filtros:
+            c.execute("SELECT nome, ramal FROM agendaInterna WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (i,i))
+            listaFiltros.append(c.fetchall())
+        for i in filtros:
+            c.execute("SELECT nome, ramal FROM agendaDireta WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (i,str(i)))
+            listaFiltros2.append(c.fetchall())
+        conexao.close()
+        ramais = listaFiltros
+        ramais2 = listaFiltros2
+        print(listaFiltros)
+        return render_template('table.html', rows=ramais, rows2=ramais2,filtros=filtros,filtro='ativado')
+        #return render_template('table.html', rows=rows, rows2=rows2)
+    return abrirAgenda()
 
 @app.route('/excluirFiltro', methods=['POST'])
 def excluirFiltro():
@@ -372,20 +377,81 @@ def login():
 def validarLogin():
     usuario = request.form['usuario']
     senha = request.form['senha']
-    if (usuario=='Andre Lacerda')and(senha=='segurancadeti'):
-        session['logged_in'] = True
-        return render_template('admin.html', nome=usuario)
-    else:
-        session.pop('logged_in', None)
-        return render_template('login.html',mensagemRetorno='Usuario ou senha incorreto')
+    users = ['Andre Lacerda',
+             'Wagner',
+             'Ana Elisa']
+    passwords = ['segurancati',
+                 'segurancati',
+                 'copomg23!@']
+    i = 0
+    while (i<len(users)):
+        print('user:')
+        print(users[i])
+        print('senha:')
+        print(passwords[i])
+        if (usuario==users[i])and(senha==passwords[i]):
+            session['logged_in'] = True
+            return render_template('admin.html', nome=usuario)
+        i = i+1
+    session.pop('logged_in', None)
+    return render_template('login.html',mensagemRetorno='Usuario ou senha incorreto')
 
 @app.route('/admin', methods=['POST'])
 def admin():
     return render_template('admin.html')
+
 @app.route('/logout', methods=['POST'])
 def logout():
     session.pop('logged_in', None)
     return render_template('index.html')
+
+@app.route('/editarBanner', methods=['POST'])
+def editarBanner():
+    return render_template('editarBanner.html')
+
+# Adicionar e excluir imagens do diretorio
+
+UPLOAD_FOLDER = 'static/images/Banners'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+#app.config['ALLOWED_EXTENSIONS'] = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    # Verifica se o arquivo está presente no request
+    if 'file' not in request.files:
+        return 'Nenhum arquivo enviado'
+
+    file = request.files['file']
+
+    # Verifica se o arquivo possui um nome
+    if file.filename == '':
+        return 'Nome do arquivo não encontrado'
+
+    # Salva o arquivo no diretório de upload
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+
+    return 'Arquivo {} enviado com sucesso!'.format(file.filename)
+
+def excluir():
+    # Caminho completo para o arquivo que será excluído
+    file_path = 'static/images/imagem4.jpg'
+    
+    # Verifica se o arquivo existe
+    if os.path.exists(file_path):
+        # Exclui o arquivo
+        os.remove(file_path)
+        return 'Arquivo excluído com sucesso!'
+    else:
+        return 'Arquivo não encontrado.'
+
+def listarDiretorio():
+    # Diretório onde estão os arquivos
+    directory = 'static/images'
+    
+    # Obtém a lista de arquivos existentes no diretório
+    file_list = os.listdir(directory)
+    
+    return render_template('index.html', files=file_list)
 
 if __name__ == '__main__':
     #app.run(host='192.168.20.125')

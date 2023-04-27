@@ -69,7 +69,8 @@ Pagina inicial
 
 .menu-form{
     display: inline-block;
-    width: 80%;
+    width: 100%;
+    height: auto;
 }
 
 .menu-botoes:hover {
@@ -196,6 +197,14 @@ h2 {
     width: 48%;
     float: left;
 }
+
+.titulo-filtro{
+    color: #363636;
+    font-size: 10;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+}
+
 .titulo-principal{
     width: 100%;
 }
