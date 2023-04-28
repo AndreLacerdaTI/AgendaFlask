@@ -18,7 +18,13 @@ def index():
 
 @app.route('/home', methods=['POST'])
 def home():
-    return render_template('index.html')
+    directory = 'static/images/Banners'
+    
+    # Obtém a lista de arquivos existentes no diretório
+    file_list = os.listdir(directory)
+    
+    print('arquivos',file_list)
+    return render_template('index.html',imagens=file_list)
 
 @app.route('/paginaCadastro',methods=['POST'])
 def paginaCadastro():
