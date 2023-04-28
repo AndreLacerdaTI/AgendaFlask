@@ -1,19 +1,84 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Página de Upload</title>
+    <title>Lista de Arquivos</title>
+    <style>
+      #dropzone {
+        border: 2px dashed gray;
+        padding: 20px;
+        text-align: center;
+        font-size: 1.2em;
+      }
+    </style>
+    <script>
+      function handleDrop(event) {
+        event.preventDefault();
+        
+        var file = event.dataTransfer.files[0];
+        var formData = new FormData();
+        formData.append('file', file);
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload', true);
+        
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            alert(xhr.responseText);
+          }
+        };
+        
+        xhr.send(formData);
+      }
+      
+      function handleDragOver(event) {
+        event.preventDefault();
+      }
+    </script>
   </head>
   <body>
-    <h1>Upload de Arquivo</h1>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-      <input type="file" name="file">
-      <input type="submit" value="Enviar">
+    <h1>Lista de Arquivos</h1>
+    <!-- Listando todas as imagens dentro do diretorio -->
+    <form method="post" action="{{ url_for('listarDiretorio') }}">
+      <button type="submit" class="botao-excluir">Listar diretorio</button>
     </form>
-    <ul>
-        {% for file in files %}
-            <li>{{ file }}</li>
-        {% endfor %}
-    </ul>
+    <!-- Enviando imagens para dentro do diretorio -->
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Enviar">
+    </form>
+    <table class="tebela-interno">
+      <thead>
+        <tr>
+          <th class="titulo-nome">Nome</th>
+          <th class="titulo-nome">Renomear</th>
+          <th class="titulo-nome">Excluir</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+            {% for file in files %}
+              <th>{{ file }}</th>
+              <th>
+                <form method="post" action="{{ url_for('renomearImagem') }}">
+                  <button class="botao-excluir" name="botaoExcluir" value="{{file}}">Renomear</button>
+                </form>
+              </th>
+              <th>
+                <form method="post" action="{{ url_for('excluirImagem') }}">
+                  <button class="botao-excluir" name="botaoExcluir" value="{{file}}">Excluir</button>
+                </form>
+              </th>
+            {% endfor %}
+        </tr>
 
+      </tbody>
+    </table>
+    <h1>Arrastar</h1>
+    <div id="dropzone" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+      Arraste e solte um arquivo aqui
+    </div>
+    {% if mensagemRetorno %}
+            <p class="mensagem-retorno">{{mensagemRetorno}}</p>
+    {% endif %}
   </body>
 </html>

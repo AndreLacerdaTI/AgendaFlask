@@ -8,7 +8,13 @@ app.secret_key = 'sua_chave_secreta'
 # rota principal
 @app.route('/')
 def index():
-    return render_template('index.html')
+    directory = 'static/images/Banners'
+    
+    # Obtém a lista de arquivos existentes no diretório
+    file_list = os.listdir(directory)
+    
+    print('arquivos',file_list)
+    return render_template('index.html',imagens=file_list)
 
 @app.route('/home', methods=['POST'])
 def home():
@@ -415,43 +421,91 @@ UPLOAD_FOLDER = 'static/images/Banners'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #app.config['ALLOWED_EXTENSIONS'] = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
+
+@app.route('/uploadDrop', methods=['POST'])
+def uploadDrop():
+    file = request.files['file']
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+    retorno = 'Arquivo {} enviado com sucesso!'.format(file.filename)
+    return render_template('editarBanner.html',mensagemRetorno=retorno)
+
+
 @app.route('/upload', methods=['POST'])
 def upload():
     # Verifica se o arquivo está presente no request
     if 'file' not in request.files:
-        return 'Nenhum arquivo enviado'
+        retorno = 'Nenhum arquivo enviado'
+        return render_template('editarBanner.html',mensagemRetorno=retorno)
 
     file = request.files['file']
 
     # Verifica se o arquivo possui um nome
     if file.filename == '':
-        return 'Nome do arquivo não encontrado'
+        retorno = 'Nome do arquivo não encontrado'
+        return render_template('editarBanner.html',mensagemRetorno=retorno)
 
     # Salva o arquivo no diretório de upload
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
 
-    return 'Arquivo {} enviado com sucesso!'.format(file.filename)
 
-def excluir():
+    retorno = 'Arquivo {} enviado com sucesso!'.format(file.filename)
+    return render_template('editarBanner.html',mensagemRetorno=retorno)
+
+@app.route('/excluirImagem', methods=['POST'])
+def excluirImagem():
+    botaoExcluir = request.form['botaoExcluir']
+    print(botaoExcluir)
     # Caminho completo para o arquivo que será excluído
-    file_path = 'static/images/imagem4.jpg'
+    nomeArquivo = 'static/images/Banners/'+botaoExcluir
+    file_path = nomeArquivo
     
     # Verifica se o arquivo existe
     if os.path.exists(file_path):
         # Exclui o arquivo
         os.remove(file_path)
-        return 'Arquivo excluído com sucesso!'
+        retorno = 'Arquivo excluído com sucesso!'
+        return render_template('editarBanner.html',mensagemRetorno=retorno)
     else:
-        return 'Arquivo não encontrado.'
+        retorno = 'Arquivo não encontrado.'
+        return render_template('editarBanner.html',mensagemRetorno=retorno)
 
+@app.route('/listarDiretorio', methods=['POST'])
 def listarDiretorio():
     # Diretório onde estão os arquivos
-    directory = 'static/images'
+    directory = 'static/images/Banners'
     
     # Obtém a lista de arquivos existentes no diretório
     file_list = os.listdir(directory)
     
-    return render_template('index.html', files=file_list)
+    print('arquivos',file_list)
+
+    return render_template('editarBanner.html', files=file_list)
+@app.route('/renomearImagem', methods=['POST'])
+def renomearImagem():
+    # Diretório onde estão as imagens
+    directory = 'static/images/Banners'
+    
+    # Nome antigo do arquivo
+    old_name = 'nome_antigo.jpg'
+    
+    # Novo nome desejado para o arquivo
+    new_name = 'novo_nome.jpg'
+    
+    # Caminho completo para o arquivo antigo
+    old_path = os.path.join(directory, old_name)
+    
+    # Caminho completo para o arquivo com o novo nome
+    new_path = os.path.join(directory, new_name)
+    
+    # Verifica se o arquivo antigo existe
+    if os.path.exists(old_path):
+        # Renomeia o arquivo
+        os.rename(old_path, new_path)
+        retorno = 'Arquivo renomeado com sucesso!'
+        return render_template('editarBanner.html',mensagemRetorno=retorno)
+    else:
+        retorno = 'Arquivo não encontrado.'
+        return render_template('editarBanner.html',mensagemRetorno=retorno)
 
 if __name__ == '__main__':
     #app.run(host='192.168.20.125')

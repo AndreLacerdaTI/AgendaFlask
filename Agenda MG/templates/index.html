@@ -52,10 +52,15 @@
   <h2 class="titulo-principal">ENDOMARKETING</h2>
   <!-- Carrossel com imagens -->
   <div id="carousel">
-    <img class="active" src="/static/images/Banners/imagem1.png" alt="Imagem 1">
-    <img src="/static/images/Banners/imagem2.png" alt="Imagem 2">
-    <img src="/static/images/Banners/imagem3.jpg" alt="Imagem 3">
-    <img src="/static/images/Banners/imagem4.jpg" alt="Imagem 4">
+    {% if imagens %}
+        {% for imagem in imagens %}
+            {% if loop.first %}
+                <img class="active" src="/static/images/Banners/{{imagem}}" alt="{{imagem}}">
+            {% else %}
+                <img src="/static/images/Banners/{{imagem}}" alt="{{imagem}}">
+            {% endif %}
+        {% endfor %}
+    {% endif %}
   </div>
   <h1></h1>
   <script>

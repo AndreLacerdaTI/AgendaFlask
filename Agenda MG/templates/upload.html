@@ -5,9 +5,8 @@
 </head>
 <body>
     <h1>Upload de Arquivo</h1>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="submit" value="Enviar">
+    <form method="post" action="{{ url_for('listarDiretorio') }}">
+        <button type="submit" class="botao-excluir">Listar diretorio</button>
     </form>
 </body>
 </html>
