@@ -1,0 +1,52 @@
+#dropzone{
+    border: 2px dashed gray;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.2em;
+    transition: 0.3s;
+}
+
+#dropzone.dragging {
+    border: 2px solid #FED100;
+    background-color: #FED100;
+    font-weight: bold;
+    color: #ffffff;
+}
+#dropzone:hover {
+    font-weight: bold;
+}
+
+.titulo-nome {
+    text-align: center;
+    width:70%;
+    background:#262424;
+    border-radius: 0px;
+    color: white;
+    padding: 8px;
+}
+
+table{
+    width: 100%;
+    font-family: 'Arial';
+    padding: 10;
+    float: left;
+    margin-right: 1%;
+
+    border-radius: 40px;
+    padding: 5px;
+}
+
+td {
+    color:#262424;
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 1px solid #aaaaaa;
+    padding: 8px;
+    transition: 5s;
+}
+
+tr:hover {
+    background-color: #FED100;
+    transition: 0.3s;
+}
