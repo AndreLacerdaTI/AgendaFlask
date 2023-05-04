@@ -42,22 +42,32 @@
         var file = event.dataTransfer.files[0];
         console.log('Arquivo solto:', file.name);
       }
+      
     </script>
   </head>
   <body>
-    <h1>Lista de Arquivos</h1>
-    <!-- Listando todas as imagens dentro do diretorio -->
-    <form method="post" action="{{ url_for('listarDiretorio') }}">
-      <button type="submit" class="botao-excluir">Listar diretorio</button>
-    </form>
-    <h1>Arrastar</h1>
+    <div class="menu-superior" id="esconder">
+      <form class="menu-botoes" method="post" id="esconder" action="{{ url_for('admin') }}">
+          <button class="menu-botoes">Voltar</button>
+      </form>
+      <h1 class="botao-atual">Editar banner</h1>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <div id="dropzone" ondragenter="handleDragEnter(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
       Arraste e solte a imagem aqui
     </div>
+    <h1></h1>
     <!-- Enviando imagens para dentro do diretorio -->
-    <form method="POST" enctype="multipart/form-data">
-      <input type="file" name="file">
-      <input type="submit" value="Enviar">
+    <form class="form-enviar" method="POST" enctype="multipart/form-data" action="{{ url_for('upload') }}">
+      <div>
+        <label for="arquivo">Selecionar imagem</label>
+        <input type="file" name="file" id="arquivo">
+        <button class="botao-enviar" type="submit" value="Enviar">Enviar</button>
+      </div>
     </form><br>
     {% if mensagemRetorno %}
             <p class="mensagem-retorno">{{mensagemRetorno}}</p>
@@ -66,7 +76,15 @@
       <table class="tebela-interno">
         <thead>
           <tr>
-            <th class="titulo-nome">Nome</th>
+            <th class="titulo-nome">
+              <!-- Listando todas as imagens dentro do diretorio -->
+              <form class="form-botao-atualizar" method="post" action="{{ url_for('listarDiretorio') }}">
+                <button type="submit" class="botao-atualizar" alt="Atualizar">
+                  <img class="icone-botao-atualizar" src="{{ url_for('static', filename='images/icone-atualizar.png') }}">
+                </button>
+              </form>
+              <h3 class="texto-nome">Nome</h3>
+            </th>
             <th class="titulo-nome">Renomear</th>
             <th class="titulo-nome">Excluir</th>
           </tr>
@@ -77,24 +95,30 @@
                 <td>{{ file }}</td>
                 <td>
                   <form method="post" action="{{ url_for('renomearImagem') }}">
-                    <button class="botao-excluir" name="botaoExcluir" value="{{file}}">Renomear</button>
+                    <input type="text" value="{{file}}" class="menu-input-escondido" id="nome_antigo" name="nome_antigo">
+                    <input type="text" value="{{file}}" class="menu-input" id="nome_novo" name="nome_novo">
+                    <button id="my-button" class="botao-renomear" class="btn" value="{{file}}">
+                      <img class="icone-botao" src="{{ url_for('static', filename='images/icone-salvar.png') }}">
+                    </button>
                   </form>
                 </td>
                 <td>
                   <form method="post" action="{{ url_for('excluirImagem') }}">
-                    <button class="botao-excluir" name="botaoExcluir" value="{{file}}">Excluir</button>
+                    <button class="botao-excluir" name="botaoExcluir" value="{{file}}">
+                      <img class="icone-botao-atualizar" src="{{ url_for('static', filename='images/icone-excluir.png') }}">
+                    </button>
                   </form>
                 </td>
               </tr>
           {% endfor %}
-          <tr>
-            <td class="rodape-nome"> </td>
-            <td class="rodape-ramal"> </td>
-          </tr>
         </tbody>
       </table>
     {% else %}
-      <p class="mensagem-retorno">Nenhum arquivo foi encontrado!</p>
+      <form class="form-botao-atualizar-central" method="post" action="{{ url_for('listarDiretorio') }}">
+        <button type="submit" class="botao-atualizar" alt="Atualizar">
+          <img class="icone-botao-atualizar" src="{{ url_for('static', filename='images/icone-atualizar-escuro.png') }}">
+        </button>
+      </form>
     {% endif %}
   </body>
 </html>

@@ -490,12 +490,14 @@ def listarDiretorio():
 def renomearImagem():
     # Diretório onde estão as imagens
     directory = 'static/images/Banners'
-    
+
+    nomeNovo = request.form['nome_novo']
+    nomeAntigo = request.form['nome_antigo']
     # Nome antigo do arquivo
-    old_name = 'nome_antigo.jpg'
+    old_name = nomeAntigo
     
     # Novo nome desejado para o arquivo
-    new_name = 'novo_nome.jpg'
+    new_name = nomeNovo
     
     # Caminho completo para o arquivo antigo
     old_path = os.path.join(directory, old_name)
