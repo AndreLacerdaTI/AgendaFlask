@@ -35,8 +35,11 @@ def paginaCadastro():
 # Cadastrando Ramal Direto
 @app.route('/cadastrarDireto', methods=['POST'])
 def cadastrarDireto():
-    nome = request.form['nome']
+    nome_form = request.form['nome']
+    nome_minusculo = nome_form.lower()
+    nome = nome_minusculo
     ramal = int(request.form['ramal'])
+    setor = request.form['setor']
     # Verificando se existe o ramal
     import sqlite3
     conexao = sqlite3.connect('agenda.db')
@@ -61,12 +64,12 @@ def cadastrarDireto():
     if (validador==0):
         conexao = sqlite3.connect('agenda.db')
         c = conexao.cursor()
-        c.execute("INSERT INTO agendaDireta (nome, ramal) VALUES (?, ?)", (nome, ramal))
+        c.execute("INSERT INTO agendaDireta (nome, ramal, setor) VALUES (?, ?, ?)", (nome, ramal, setor))
 
         conexao.commit()
         conexao.close()
 
-        retorno = 'Ramal Direto: '+str(ramal)+' - '+nome+' \ncadastrado com sucesso!'
+        retorno = 'Ramal Direto: '+str(ramal)+' - '+nome+' - '+setor+' \ncadastrado com sucesso!'
 
         #return f'Obrigado, {nome}, nós entraremos em contato em breve no email {ramal}.'
         #textoRetorno = 'Ramal '+ramal+'-'+nome+' cadastrado com sucesso!'
@@ -78,8 +81,11 @@ def cadastrarDireto():
 @app.route('/cadastrar', methods=['POST'])
 def cadastrar():
     import sqlite3
-    nome = request.form['nome']
+    nome_form = request.form['nome']
+    nome_minusculo = nome_form.lower()
+    nome = nome_minusculo
     ramal = int(request.form['ramal'])
+    setor = request.form['setor']
     # Verificando se existe o ramal
     conexao = sqlite3.connect('agenda.db')
     c = conexao.cursor()
@@ -103,12 +109,12 @@ def cadastrar():
     if (validador==0):
         conexao = sqlite3.connect('agenda.db')
         c = conexao.cursor()
-        c.execute("INSERT INTO agendaInterna (nome, ramal) VALUES (?, ?)", (nome, ramal))
+        c.execute("INSERT INTO agendaInterna (nome, ramal, setor) VALUES (?, ?, ?)", (nome, ramal, setor))
 
         conexao.commit()
         conexao.close()
 
-        retorno = 'Ramal Interno: '+str(ramal)+' - '+nome+' \ncadastrado com sucesso!'
+        retorno = 'Ramal Interno: '+str(ramal)+' - '+nome+' - '+setor+' \ncadastrado com sucesso!'
 
         #return f'Obrigado, {nome}, nós entraremos em contato em breve no email {ramal}.'
         #textoRetorno = 'Ramal '+ramal+'-'+nome+' cadastrado com sucesso!'
@@ -139,7 +145,8 @@ def search():
     if request.method == 'POST':
         # Get the search term from the form data
         busca_term = request.form['busca_term']
-        nome = busca_term
+        nome_minusculo = busca_term.lower()
+        nome = nome_minusculo
         if eh_int(busca_term):
             ramal = int(busca_term)
         else:
@@ -226,6 +233,31 @@ def search():
         return render_template('search_select.html', rows=listaRamaisI, rows2=listaRamaisD)
     return render_template('search_select.html')
 
+
+@app.route('/search_select',  methods=['POST'])
+def search_select():
+    import sqlite3
+    conexao = sqlite3.connect('agenda.db')
+    c = conexao.cursor()
+    c.execute('SELECT nome, ramal FROM agendaInterna')
+    ramais = c.fetchall()
+
+    listaRamaisI = []
+    listaRamaisD = []
+    tipos = []
+    for i in ramais:
+        tipos.append('interno')
+        listaRamaisI.append(i)
+
+    c.execute('SELECT nome, ramal FROM agendaDireta')
+    ramais = c.fetchall()
+    conexao.close()
+    for i in ramais:
+        tipos.append('direto')
+        listaRamaisI.append(i)
+    return render_template('search_select.html', rows=listaRamaisI, rows2=listaRamaisD)
+
+
 @app.route('/search_results_table',  methods=['POST'])
 def search_results_table():
     dados = request.form['editar']
@@ -286,6 +318,7 @@ def salvar_alteracao():
 
             retorno = 'Ramal Direto: '+str(ramal)+' - '+nome+' excluido com sucesso!'
             return render_template('admin.html', mensagemRetorno=retorno)
+        return render_template('admin.html', mensagemRetorno='Erro: conflito interno')
 @app.route('/abrirAgenda', methods=['POST'])
 def abrirAgenda():
     # Importando agenda interna

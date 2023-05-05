@@ -242,6 +242,7 @@ Pagina inicial
         border-bottom: 1px solid #aaaaaa;
         padding: 8px;
         transition: 5s;
+        text-transform: uppercase;
     }
     
     tr:hover {

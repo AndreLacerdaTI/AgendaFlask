@@ -78,7 +78,7 @@ h3 {
 
 .login {
     position: relative;
-    height: 405px;
+    height: 460px;
     width: 405px;
     margin: auto;
     padding: 60px 60px;
@@ -137,6 +137,7 @@ input{
     transition: all 0.5s ease-in-out;
     font-family: 'Montserrat', sans-serif;
     text-align: center;
+    text-transform: uppercase;
 }
 .input-disabled{
     width: 40%;

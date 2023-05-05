@@ -10,6 +10,23 @@
         <button class="voltar-agenda">Voltar</button>
     </form>
     <h1></h1>
+    <div class="menu-esquerda" id="esconder">
+        <h1 class="espaco-botao">&nbsp</h1>
+        <form class="menu-botoes" method="post" name="tipo_filtro" action="{{ url_for('filtrarAgenda') }}">
+            <button class="menu-botoes">Interna</button>
+            <button class="menu-botoes">Direta</button>
+        </form>
+        <h1 class="botao-atual">Todos</h1>
+    </div>
+    <div class="menu-direita" id="esconder">
+        <!-- Pesquisar / filtrar -->
+        <form class="menu-form" method="post" action="{{ url_for('filtrarAgenda') }}">
+            <input class="menu-input" autocomplete=off placeholder="Buscar nome / ramal" type="text" id="pesquisar" name="pesquisar">
+            <button class="menu-botoes-direita">
+                <img class="icone-botao" src="{{ url_for('static', filename='images/icone-pesquisa.png') }}">
+            </button>
+        </form>
+    </div>
     <h2 class="titulo-interno">Selecionar ramal</h2>
     <table class="tebela-interno">
         <thead>

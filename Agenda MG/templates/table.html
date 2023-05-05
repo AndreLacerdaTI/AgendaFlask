@@ -6,24 +6,29 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+    <!-- Logo Copobras -->
     <center><img class="logo" src="{{ url_for('static', filename='images/ai.png') }}"></center>
     <div class="menu-esquerda" id="esconder">
+        <h1 class="espaco-botao">&nbsp</h1>
         <form class="menu-botoes" method="post" id="esconder" action="{{ url_for('home') }}">
             <button class="menu-botoes">Home</button>
         </form>
         <h1 class="botao-atual">Agenda</h1>
     </div>
     <div class="menu-direita" id="esconder">
+        <!-- Pesquisar / filtrar -->
         <form class="menu-form" method="post" action="{{ url_for('filtrarAgenda') }}">
             <input class="menu-input" autocomplete=off placeholder="Buscar nome / ramal" type="text" id="pesquisar" name="pesquisar">
             <button class="menu-botoes-direita">
                 <img class="icone-botao" src="{{ url_for('static', filename='images/icone-pesquisa.png') }}">
             </button>
         </form>
+        <!-- Imprimir -->
         <button class="menu-botao-imp" id="esconder" onclick="window.print()">
             <img class="icone-botao" src="{{ url_for('static', filename='images/icone-impressora2.png') }}">
         </button>
     </div>
+    <!-- Excluir filtros -->
     <form class="menu-form" method="post" action="{{ url_for('excluirFiltro') }}">
         {% if filtros %}
             <h3 class="titulo-filtro">FILTRAR POR:
@@ -35,8 +40,10 @@
             </h3>
         {% endif %}
     </form>
+    <!-- Titulos das tabelas -->
     <h2 class="titulo-interno">RAMAL INTERNO</h2>
     <h2 class="titulo-direto">RAMAL DIRETO</h2>
+    <!-- Tabela interna -->
     <table class="tebela-interno">
         <thead>
             <tr>
@@ -70,7 +77,7 @@
             </tr>
         </tbody>
     </table>
-    
+    <!-- Tabela direta -->
     <table class="tebela-direto">
         <thead>
             <tr>

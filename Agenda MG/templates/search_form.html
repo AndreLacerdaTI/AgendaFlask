@@ -18,6 +18,10 @@
             <input type="text" placeholder="Digite o nome ou ramal" name="busca_term" id="busca_term"><br>
             <button type="submit" class="botao-cadastrar">Buscar</button>
         </form>
+        <br><br>
+        <form method="post" action="{{ url_for('search_select') }}">
+            <button type="submit" class="botao-cadastrar">Selecionar na tabela</button>
+        </form>
     </div>
 </body>
 </html>

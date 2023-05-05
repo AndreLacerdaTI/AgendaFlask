@@ -16,16 +16,16 @@ Pagina inicial
 .menu-esquerda {
     color: #000000;
     background-color: #363636;
-    width: 50%;
+    width: 40%;
     height: 60px;
-    text-align: center;
+    text-align: left;
     border-radius: 24px 0px 0px 24px;
     float: left;
 }
 .menu-direita {
     color: #000000;
     background-color: #363636;
-    width: 50%;
+    width: 60%;
     height: 50px;
     text-align: right;
     border-radius: 0px 24px 24px 0px;
@@ -69,7 +69,7 @@ Pagina inicial
 
 .menu-form{
     display: inline-block;
-    width: 100%;
+    width: 80%;
     height: auto;
 }
 
@@ -252,6 +252,7 @@ td {
     border-bottom: 1px solid #aaaaaa;
     padding: 8px;
     transition: 5s;
+    text-transform: uppercase;
 }
 
 tr:hover {
