@@ -1,0 +1,373 @@
+/*
+Pagina inicial
+*/
+
+@media print {
+    /* Hide the element with ID 'my-element' when the page is printed */
+    #esconder {
+        display: none;
+    }
+    }
+    .menu {
+        width: 100%;
+        position: relative;
+    }
+    
+    .menu-esquerda {
+        color: #000000;
+        background-color: #363636;
+        width: 40%;
+        height: 60px;
+        text-align: left;
+        border-radius: 24px 0px 0px 24px;
+        float: left;
+    }
+    .menu-direita {
+        color: #000000;
+        background-color: #363636;
+        width: 60%;
+        height: 50px;
+        text-align: right;
+        border-radius: 0px 24px 24px 0px;
+        display: inline-block;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    
+    .botao-atual{
+        color: #ffffff;
+        border-bottom: 2px solid #FED100;
+        display:inline-block;
+        margin-left: 12px;
+        font-size: 22px;
+        font-family: 'Montserrat', sans-serif;
+        text-transform: uppercase;
+    }
+    .espaco-botao{
+        color: #ffffff;
+        display:inline-block;
+        margin-left: 12px;
+        font-size: 22px;
+        font-family: 'Montserrat', sans-serif;
+        text-transform: uppercase;
+    }
+    .menu-botoes{
+        color: rgba(255, 255, 255, 0.2);
+        background-color: #ffffff00;
+        padding-left: 12px;
+        padding-right: 12px;
+        font-size: 22px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        display: inline-block;
+        font-weight: 100;
+        font-family: 'Montserrat', sans-serif;
+        border: 0;
+        letter-spacing: 2px;
+        cursor: pointer;
+    }
+    
+    .menu-form{
+        display: inline-block;
+        width: 80%;
+        height: auto;
+    }
+    
+    .menu-botoes:hover {
+        color: #ffffff;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    
+    .menu-input{
+        border: none;
+        display:inline;
+        height: 30px;
+        width: 30%;
+        background: rgba(130, 130, 130, 0);
+        border-bottom: 2px solid rgb(255, 255, 255);
+        overflow: hidden;
+        transition: all 0.5s ease-in-out;
+        font-family: 'Montserrat', sans-serif;
+        text-align: center;
+        text-justify: auto;
+        color: #ffffff;
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+    .menu-input:focus{
+        width: 75%;
+        color: #ffffff;
+        border: none;
+        border-bottom: 2px solid rgb(255, 255, 255);
+        outline: none;
+        font-size: 18px;
+    }
+    .menu-botoes-direita {
+        height: auto;
+        width: 20%;
+        padding-top: 10px;
+        color: rgba(130, 130, 130, 0.348);
+        background-color: #ffffff00;
+        cursor: pointer;
+        border: 0px;
+        transition: 0.5s;
+    }
+    .menu-botoes-direita:hover{
+        scale: 1.2;
+    }
+    .menu-botao-imp {
+        height: auto;
+        width: 10%;
+        color: rgba(130, 130, 130, 0.348);
+        background-color: #ffffff00;
+        cursor: pointer;
+        border: 0px;
+        transition: 0.5s;
+    }
+    .menu-botao-imp:hover{
+        scale: 1.2;
+    }
+    .icone-botao{
+        width: 30px; 
+        height: auto;
+    }
+    
+    .filtros{
+        background-color: #363636;
+        border-radius: 20px;
+        border: 0px;
+        height: 40px;
+        width: 100px;
+        color: #ffffff;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 18px;
+        text-align: right;
+        font-weight: bold;
+        transition: 0.3s;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    .filtros:hover{
+        background-color: #FED100;
+        color: #FED100;
+        font-size: 0px;
+        text-align: center;
+    }
+    
+    .icone-fechar{
+        width: 15px;
+        height: auto;
+        align-items: right;
+    }
+    
+    .imagem-original{
+        width: 80%;
+        height: auto;
+        display: inline-block;
+    }
+    .imagem-alternativa{
+        width: 80%;
+        height: auto;
+        display: inline-block;
+    }
+    
+    .logo {
+        width: 20%;
+        position: relative;
+        margin: auto;
+    }
+    .icone-botoes{
+        width: 40px;
+        height: 40px;
+        padding-top: 20px;
+    }
+    
+    h2 {
+        text-align: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        color: #363636;
+        font-size: 20;
+        font-family: 'Arial';
+        font-weight: 600;
+        border-radius: 22px;
+        border: 2px solid #FED100;
+        width: 100%;
+    }
+    
+    .titulo-filtro{
+        color: #363636;
+        font-size: 10;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
+    }
+    
+    .titulo-principal{
+        width: 100%;
+    }
+    .titulo-direto{
+        margin-left: 0.5%;
+    }
+    body {
+        background-color: rgb(255, 255, 255);
+    }
+    
+    table{
+        width: 100%;
+        font-family: 'Arial';
+        padding: 10;
+        
+        margin-right: 1%;
+        border: 2px solid #FED100;
+        border-radius: 40px;
+        padding: 5px;
+    }
+    .titulo-nome {
+        text-align: center;
+        background:#262424;
+        border-radius: 50px 0px 0px 0px;
+        color: white;
+        padding: 8px;
+    }
+    .titulo-ramal {
+        text-align: center;
+        background:#262424;
+        border-radius: 0px 50px 0px 0px;
+        color: white;
+        padding: 8px;
+    }
+    td {
+        color:#262424;
+        width: 33%;
+        text-align: center;
+        font-weight: bold;
+        border-bottom: 1px solid #aaaaaa;
+        padding: 8px;
+        transition: 5s;
+        text-transform: uppercase;
+    }
+    
+    tr:hover {
+        background-color: #FED100;
+        transition: 0.3s;
+    }
+    
+    .rodape-ramal  {
+        color: white;
+        background:#ffffff;
+        border-radius: 0px 0px 50px 0px;
+        border-bottom: 1px solid #ffffff;
+    }
+    .rodape-nome  {
+        text-align: center;
+        color: white;
+        background:#ffffff;
+        border-radius: 0px 0px 0px 50px;
+        border-bottom: 1px solid #ffffff;
+    
+    }
+    
+    .botao-editar{
+        width: 100%;
+        height: auto;
+        background-color: #ffffff00;
+        border: 0;
+        transition: 0.3s;
+    }
+    .botao-editar:hover{
+        scale: 1.2;
+    }
+    .titulo-central{
+        text-align: center;
+        background:#262424;
+        border-radius: 0px;
+        color: white;
+        padding: 8px;
+    }
+    .voltar-agenda{
+        color: #505050;
+        background-color: #ffffff00;
+        border-left: none;
+        border: 0;
+        color: #505050;
+        font-size: 20px;
+        font-family: 'Montserrat', sans-serif;
+    }
+    .voltar-agenda:hover{
+        color: #FED100;
+    }
+
+    /*  Checkbox slider  */
+
+    /* The switch - the box around the slider */
+h3{
+    position: relative;
+    display: inline-flex;
+    padding-left: 5px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    color: #505050;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 17px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 13px;
+    width: 13px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #FED100;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #FED100;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(13px);
+    -ms-transform: translateX(13px);
+    transform: translateX(13px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }

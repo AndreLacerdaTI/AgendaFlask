@@ -33,6 +33,7 @@
             <tr>
                 <th class="titulo-nome">Nome</th>
                 <th class="titulo-central">Ramal</th>
+                <th class="titulo-central">Setor</th>
                 <th class="titulo-central">Tipo</th>
                 <th class="titulo-ramal">Selecionar</th>
             </tr>
@@ -42,10 +43,11 @@
                 <tr>
                     <td>{{ row[0] }}</td>
                     <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
                     <td>INTERNO</td>
                     <td>
                         <form method="post" action="{{ url_for('search_results_table') }}">
-                            <button class="botao-editar" name="editar" value="{{row[0],row[1],'interno'}}">
+                            <button class="botao-editar" name="editar" value="{{row[0],row[1],row[2],'interno'}}">
                                 <img class="icone-botao" src="{{ url_for('static', filename='images/icone-editar.png') }}">
                             </button>
                         </form>
@@ -56,10 +58,11 @@
                 <tr>
                     <td>{{ row[0] }}</td>
                     <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
                     <td>DIRETO</td>
                     <td>
                         <form method="post" action="{{ url_for('search_results_table') }}">
-                            <button class="botao-editar" name="editar" value="{{row[0],row[1],'direto'}}">
+                            <button class="botao-editar" name="editar" value="{{row[0],row[1],row[2],'direto'}}">
                                 <img class="icone-botao" src="{{ url_for('static', filename='images/icone-editar.png') }}">
                             </button>
                         </form>

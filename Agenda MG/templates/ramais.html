@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Agenda de Ramais - MG</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="icon" href="https://www.grupocopobras.com.br/wp-content/uploads/2020/12/cropped-logo-site-2-32x32-1.png" sizes="32x32">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleRamais.css') }}">
 </head>
 <body>
     <!-- Logo Copobras -->
@@ -42,52 +41,43 @@
         {% endif %}
     </form>
     <!-- Titulos das tabelas -->
-    <h2 class="titulo-interno">RAMAL INTERNO</h2>
-    <h2 class="titulo-direto">RAMAL DIRETO</h2>
+    <h2 class="titulo-interno">RAMAL INTERNO
+        <form class="menu-form" method="post" action="{{ url_for('abrirAgenda') }}">
+            <button class="menu-botoes" id="esconder" name="action" value="interna">
+                <img class="icone-botao" src="{{ url_for('static', filename='images/icone-trocar.png') }}">
+            </button>
+            <button class="menu-botoes" id="esconder" name="action" value="direta">
+                <img class="icone-botao" src="{{ url_for('static', filename='images/icone-trocar.png') }}">
+            </button>
+        </form>
+    </h2>
+    <form method="POST" action="/abrirAgendaTeste">
+      <h3>INTERNO</h3>
+      <label class="switch">
+        <input type="checkbox" name="tipo" value="interno">
+        <span class="slider round"></span>
+      </label>
+      <h3>DIRETO</h3>
+      <label class="switch">
+        <input type="checkbox" name="tipo" value="direto">
+        <span class="slider round"></span>
+      </label>
+      <button class="menu-botoes" id="esconder">
+        <img class="icone-botao" src="{{ url_for('static', filename='images/icone-trocar.png') }}">
+    </button>
+    </form>
     <!-- Tabela interna -->
     <table class="tebela-interno">
         <thead>
             <tr>
                 <th class="titulo-nome">Nome</th>
-                <th class="titulo-ramal">Ramal</th>
+                <th class="titulo-central">Ramal</th>
+                <th class="titulo-ramal">Setor</th>
             </tr>
         </thead>
         <tbody>
             {% if filtro=='ativado' %}
                 {% for row in rows %}
-                    {% for i in row %}
-                    <tr>
-                        <td>{{ i[0] }}</td>
-                        <td>{{ i[1] }}</td>
-                    </tr>
-                    {% endfor %}
-                {% endfor %}
-            {% endif %}
-            {% if filtro=='desativado' %}
-                {% for row in rows %}
-                    <tr>
-                        <td>{{ row[0] }}</td>
-                        <td>{{ row[1] }}</td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-            <tr>
-                <td class="rodape-nome"> </td>
-                <td class="rodape-ramal"> </td>
-            </tr>
-        </tbody>
-    </table>
-    <!-- Tabela direta -->
-    <table class="tebela-direto">
-        <thead>
-            <tr>
-                <th class="titulo-nome">Nome</th>
-                <th class="titulo-ramal">Ramal</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if filtro=='ativado' %}
-                {% for row in rows2 %}
                     {% for i in row %}
                     <tr>
                         <td>{{ i[0] }}</td>
@@ -98,10 +88,11 @@
                 {% endfor %}
             {% endif %}
             {% if filtro=='desativado' %}
-                {% for row in rows2 %}
+                {% for row in rows %}
                     <tr>
                         <td>{{ row[0] }}</td>
                         <td>{{ row[1] }}</td>
+                        <td>{{ row[2] }}</td>
                     </tr>
                 {% endfor %}
             {% endif %}

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Informativo MG</title>
+    <title>Página Inicial</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="https://www.grupocopobras.com.br/wp-content/uploads/2020/12/cropped-logo-site-2-32x32-1.png" sizes="32x32">
     <style>
       /* Estilos para o carrossel */
       #carousel {
@@ -78,11 +79,11 @@
     images[currentIndex].classList.add("active");
 
     // Aguarda 5 segundos e chama a função novamente
-    setTimeout(changeImage, 5000);
+    setTimeout(changeImage, 10000);
   }
 
   // Inicia a troca de imagens com transição
-  setTimeout(changeImage, 5000);
+  setTimeout(changeImage, 10000);
   </script>
 </body>
 </html>

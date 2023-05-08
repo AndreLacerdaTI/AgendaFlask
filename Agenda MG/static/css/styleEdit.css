@@ -78,7 +78,7 @@ h3 {
 
 .login {
     position: relative;
-    height: 460px;
+    height: 560px;
     width: 405px;
     margin: auto;
     padding: 60px 60px;
@@ -146,6 +146,12 @@ input{
     border-radius: 20px 0px 0px 20px;
     display: inline;
 }
+
+.input-disabled-setor{
+    color: #ffffff;
+    background: rgba(63, 63, 63, 0.348);
+}
+
 .input-enabled{
     width: 40%;
     border-radius:  0px 20px 20px 0px;

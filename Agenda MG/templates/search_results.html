@@ -14,12 +14,12 @@
             </button>
         </form>
         <form method="post" action="{{ url_for('salvar_alteracao') }}">
-            <h1 class="active" name="tipo" value={{tipo}}>Editar Ramal {{tipo}}</h1><br>
+            <h1 class="active" name="tipo" value={{tipo}}>Editar Ramal {{tipo_ramal}}</h1><br>
             <h3>Antigo</h3>
             <h3>Novo &nbsp &nbsp </h3><br>
             <label for="tipo_ramal">Ramal</label>
             <div class="input-bloco">
-                <input class="input-tipo" type="text" name="tipo_ramal" value="{{ tipo_ramal }}" readonly>
+                <input class="input-tipo" type="text" name="tipo_ramal" value="{{ tipo_ramal }}"> <!-- readonly> -->
             </div>
             <label for="search_results">Nome</label>
             <div class="input-bloco">
@@ -32,6 +32,10 @@
                 <input class="input-disabled" type="text" name="resultado_ramal" id="resultado_ramal" value="{{ resultado_ramal }}" disabled>
                 <input class="input-enabled" type="text" name="resultado_ramal"  value="{{ resultado_ramal }}" required>
             </div>
+            <div class="espacamento">&nbsp</div>
+            <label for="resultado_setor">Setor:</label>
+            <input class="input-disabled-setor" type="text" name="resultado_setor" id="resultado_setor" value="{{ resultado_setor }}" disabled>
+            <input type="text" name="resultado_setor"  value="{{ resultado_setor }}" required>
             <div class="espacamento">&nbsp</div>
             <div class="input-bloco">
                 <button class="botao-cadastrar" name="action" value="cadastrar">Salvar</button>
