@@ -20,8 +20,8 @@
     </div>
     <div class="menu-direita" id="esconder">
         <!-- Pesquisar / filtrar -->
-        <form class="menu-form" method="post" action="{{ url_for('filtrarAgenda') }}">
-            <input class="menu-input" autocomplete=off placeholder="Buscar nome / ramal" type="text" id="pesquisar" name="pesquisar">
+        <form class="menu-form" method="post" action="{{ url_for('search') }}">
+            <input class="menu-input" autocomplete=off placeholder="Buscar nome / ramal" type="text" id="pesquisar" name="busca_term">
             <button class="menu-botoes-direita">
                 <img class="icone-botao" src="{{ url_for('static', filename='images/icone-pesquisa.png') }}">
             </button>
@@ -47,7 +47,7 @@
                     <td>INTERNO</td>
                     <td>
                         <form method="post" action="{{ url_for('search_results_table') }}">
-                            <button class="botao-editar" name="editar" value="{{row[0],row[1],row[2],'interno'}}">
+                            <button class="botao-editar" name="editar" value="{{row[3],'interno'}}">
                                 <img class="icone-botao" src="{{ url_for('static', filename='images/icone-editar.png') }}">
                             </button>
                         </form>
@@ -62,7 +62,8 @@
                     <td>DIRETO</td>
                     <td>
                         <form method="post" action="{{ url_for('search_results_table') }}">
-                            <button class="botao-editar" name="editar" value="{{row[0],row[1],row[2],'direto'}}">
+                            <!-- <button class="botao-editar" name="editar" value="{{row[0],row[1],row[2],row[3],'direto'}}"> -->
+                            <button class="botao-editar" name="editar" value="{{row[3],'direto'}}">
                                 <img class="icone-botao" src="{{ url_for('static', filename='images/icone-editar.png') }}">
                             </button>
                         </form>

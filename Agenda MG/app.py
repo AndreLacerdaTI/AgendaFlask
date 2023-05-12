@@ -239,7 +239,7 @@ def search_select():
     import sqlite3
     conexao = sqlite3.connect('agenda.db')
     c = conexao.cursor()
-    c.execute('SELECT nome, ramal, setor FROM agendaInterna')
+    c.execute('SELECT nome, ramal, setor, id FROM agendaInterna')
     ramais = c.fetchall()
 
     listaRamaisI = []
@@ -249,7 +249,7 @@ def search_select():
         tipos.append('interno')
         listaRamaisI.append(i)
 
-    c.execute('SELECT nome, ramal, setor FROM agendaDireta')
+    c.execute('SELECT nome, ramal, setor, id FROM agendaDireta')
     ramais = c.fetchall()
     conexao.close()
     for i in ramais:
@@ -257,21 +257,60 @@ def search_select():
         listaRamaisD.append(i)
     return render_template('search_select.html', rows=listaRamaisI, rows2=listaRamaisD)
 
-
+'''
 @app.route('/search_results_table',  methods=['POST'])
 def search_results_table():
     dados = request.form['editar']
+    teste = request.form.to_dict()
+    print('teste:',teste)
+    minha_lista = list((request.form.to_dict()).values())
+    print('convertido:',minha_lista)
+    print('dados:',dados)
     listaFiltros = dados.replace("(", "")
     listaFiltros = listaFiltros.replace(")", "")
     listaFiltros = listaFiltros.replace("[", "")
     listaFiltros = listaFiltros.replace("]", "")
     listaFiltros = listaFiltros.replace("'", "")
-    listaSetor = listaFiltros.split(",")
+    #listaSetor = listaFiltros.split(",")
     listaFiltros = listaFiltros.replace(" ", "")
     listaFiltros = listaFiltros.split(",")
-    setor = listaSetor[2]
+    #setor = str(listaSetor[2])
+    #print('SETOR',setor)
+    #print('SETOR tamanho', len(setor))
     print(listaFiltros)
-    return render_template('search_results.html',search_results=str(listaFiltros[0]),resultado_ramal=str(listaFiltros[1]),resultado_setor=setor,tipo_ramal=listaFiltros[3])
+    #return render_template('search_results.html',search_results=str(listaFiltros[0]),resultado_ramal=str(listaFiltros[1]),resultado_setor=setor,tipo_ramal=listaFiltros[3])
+    return render_template('search_results.html',search_results=str(listaFiltros[0]),resultado_ramal=str(listaFiltros[1]),resultado_setor=listaFiltros[2],id=listaFiltros[3],tipo_ramal=listaFiltros[4])
+'''
+
+def select_id(int,str):
+    if str=='interno':
+        conn = sqlite3.connect('agenda.db')
+        c = conn.cursor()
+        #cur.execute('SELECT * FROM agendaInterna')
+        c.execute("SELECT nome, ramal, setor FROM agendaInterna WHERE id = ?", (int,))
+    elif str=='direto':
+        conn = sqlite3.connect('agenda.db')
+        c = conn.cursor()
+        #cur.execute('SELECT * FROM agendaInterna')
+        c.execute("SELECT nome, ramal, setor FROM agendaDireta WHERE id = ?", (int,))
+    rows = c.fetchall()
+    conn.close()
+    return rows
+
+@app.route('/search_results_table',  methods=['POST'])
+def search_results_table():
+    dados = request.form['editar']
+    info = dados.replace(")", "")
+    info = info.replace("(", "")
+    info = info.replace("'", "")
+    info = info.replace(" ", "")
+    info = info.split(',')
+    print(info)
+    data = select_id(info[0],info[1]) # chama a função que busca pelo id e retorna as informações
+    infodb = []
+    for dados in data[0]:
+        infodb.append(dados)
+    return render_template('search_results.html',nome=infodb[0],ramal=infodb[1],setor=infodb[2],id=info[0],tipo_ramal=info[1])
 
 @app.route('/search_results',  methods=['POST'])
 def search_results():
@@ -280,18 +319,19 @@ def search_results():
 @app.route('/salvar_alteracao', methods=['POST'])
 def salvar_alteracao():
     tipo_ramal = request.form['tipo_ramal']
+    id = request.form['id']
     print(tipo_ramal)
     if request.form['action'] == 'cadastrar':
         conexao = sqlite3.connect('agenda.db')
         c = conexao.cursor()
-        search_results = request.form['search_results']
+        nome = request.form['nome']
         resultado_ramal = request.form['resultado_ramal']
         resultado_setor = request.form['resultado_setor']
-        nome = search_results
+        nome = nome.lower()
         ramal = int(resultado_ramal)
-        setor = resultado_setor
+        setor = resultado_setor.lower()
         if (tipo_ramal=='interno'):
-            c.execute('UPDATE agendaInterna SET nome = ?, ramal = ? WHERE ramal = ?', (nome, ramal, setor, ramal))
+            c.execute('UPDATE agendaInterna SET nome = ?, ramal = ?, setor = ? WHERE id = ?', (nome, ramal, setor, id))
             conexao.commit()
             conexao.close()
             retorno = 'Ramal Interno: '+str(ramal)+' - '+nome+' - '+setor+' alterado com sucesso!'
@@ -310,7 +350,7 @@ def salvar_alteracao():
         ramal = int(resultado_ramal)
         if(tipo_ramal=='interno'):
             c = conexao.cursor()
-            c.execute("DELETE FROM agendaInterna WHERE ramal=?", (ramal,))
+            c.execute("DELETE FROM agendaInterna WHERE id=?", (id,))
             conexao.commit()
             conexao.close()
 
@@ -318,7 +358,7 @@ def salvar_alteracao():
             return render_template('admin.html', mensagemRetorno=retorno)
         if(tipo_ramal=='direto'):
             c = conexao.cursor()
-            c.execute("DELETE FROM agendaDireta WHERE ramal=?", (ramal,))
+            c.execute("DELETE FROM agendaDireta WHERE id=?", (id,))
             conexao.commit()
             conexao.close()
 
@@ -331,23 +371,6 @@ def abrirAgenda():
     conn = sqlite3.connect('agenda.db')
     cur = conn.cursor()
     #cur.execute('SELECT * FROM agendaInterna')
-    cur.execute('SELECT nome, ramal FROM agendaInterna ORDER BY nome')
-    rows = cur.fetchall()
-    # Importando agenda direta
-    conexao = sqlite3.connect('agenda.db')
-    c = conexao.cursor()
-    c.execute('SELECT nome, ramal FROM agendaDireta ORDER BY nome')
-    rows2 = c.fetchall()
-    return render_template('table.html', rows=rows, rows2=rows2, filtro='desativado')
-
-@app.route('/abrirAgendaTeste', methods=['POST'])
-def abrirAgendaTeste():
-    filtros = request.form.getlist('tipo')
-    print(filtros)
-    # Importando agenda interna
-    conn = sqlite3.connect('agenda.db')
-    cur = conn.cursor()
-    #cur.execute('SELECT * FROM agendaInterna')
     cur.execute('SELECT nome, ramal, setor FROM agendaInterna ORDER BY nome')
     rows = cur.fetchall()
     # Importando agenda direta
@@ -355,7 +378,36 @@ def abrirAgendaTeste():
     c = conexao.cursor()
     c.execute('SELECT nome, ramal, setor FROM agendaDireta ORDER BY nome')
     rows2 = c.fetchall()
-    return render_template('ramais.html', rows=rows, rows2=rows2, filtro='desativado')
+    #rows.extend(rows2)
+    return render_template('table.html', rows=rows, rows2=rows2, ativados=['interno','direto'], filtro='desativado')
+@app.route('/abrirFiltro', methods=['POST'])
+def abrirFiltro():
+    abrir = 'sim'
+    return render_template('table.html', ativados=['interno','direto'], filtro='desativado',abrir=abrir)
+@app.route('/abrirAgendaFiltrando', methods=['POST'])
+def abrirAgendaFiltrando():
+    filtros = request.form.getlist('tipo')
+    if (filtros==''):
+        filtros = ['interno','direto']
+    print(filtros)
+    rows = []
+    rows2 = []
+    for i in filtros:
+        if (i=='interno'):
+            # Importando agenda interna
+            conn = sqlite3.connect('agenda.db')
+            cur = conn.cursor()
+            #cur.execute('SELECT * FROM agendaInterna')
+            cur.execute('SELECT nome, ramal, setor FROM agendaInterna ORDER BY nome')
+            rows = cur.fetchall()
+        # Importando agenda direta
+        if(i=='direto'):
+            conexao = sqlite3.connect('agenda.db')
+            c = conexao.cursor()
+            c.execute('SELECT nome, ramal, setor FROM agendaDireta ORDER BY nome')
+            rows2 = c.fetchall()
+    rows.extend(rows2)
+    return render_template('ramais.html', rows=rows, ativados=filtros, filtro='desativado')
 
 @app.route('/filtrarAgenda', methods=['POST'])
 def filtrarAgenda():
@@ -370,7 +422,7 @@ def filtrarAgenda():
         conexao = sqlite3.connect('agenda.db')
         c = conexao.cursor()
         for i in filtros:
-            c.execute("SELECT nome, ramal FROM agendaInterna WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (i,i))
+            c.execute("SELECT nome, ramal FROM agendaInterna WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (i,str(i)))
             listaFiltros.append(c.fetchall())
         for i in filtros:
             c.execute("SELECT nome, ramal FROM agendaDireta WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (i,str(i)))

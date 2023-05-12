@@ -137,7 +137,6 @@ input{
     transition: all 0.5s ease-in-out;
     font-family: 'Montserrat', sans-serif;
     text-align: center;
-    text-transform: uppercase;
 }
 .input-disabled{
     width: 40%;

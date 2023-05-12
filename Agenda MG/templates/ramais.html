@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Agenda de Ramais - MG</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleRamais.css') }}">
+    <link rel="icon" href="https://www.grupocopobras.com.br/wp-content/uploads/2020/12/cropped-logo-site-2-32x32-1.png" sizes="32x32">
 </head>
 <body>
     <!-- Logo Copobras -->
@@ -40,34 +41,55 @@
             </h3>
         {% endif %}
     </form>
-    <!-- Titulos das tabelas -->
-    <h2 class="titulo-interno">RAMAL INTERNO
-        <form class="menu-form" method="post" action="{{ url_for('abrirAgenda') }}">
-            <button class="menu-botoes" id="esconder" name="action" value="interna">
-                <img class="icone-botao" src="{{ url_for('static', filename='images/icone-trocar.png') }}">
+    <!-- Selecionar interna e direta -->
+    <form class="menu-filtrar" method="POST" action="/abrirAgendaFiltrando" id="esconder">
+        {% if ativados %}
+            <h3>INTERNO</h3>
+            <label class="switch">
+                {% if ativados[0]=='interno' %}
+                    <input type="checkbox" name="tipo" value="interno" checked>
+                    <span class="slider round"></span>
+                {% else %}
+                    <input type="checkbox" name="tipo" value="interno">
+                    <span class="slider round"></span>
+                {% endif %}
+            </label>
+            <br>
+            <h3>DIRETO</h3>
+            <label class="switch">
+                {% if ativados[1]=='direto' %}
+                    <input type="checkbox" name="tipo" value="direto" checked>
+                    <span class="slider round"></span>
+                {% elif ativados[0]=='direto' %}
+                    <input type="checkbox" name="tipo" value="direto" checked>
+                    <span class="slider round"></span>
+                {% else %}
+                    <input type="checkbox" name="tipo" value="direto">
+                    <span class="slider round"></span>
+                {% endif %}
+            </label><br>
+            <button class="botao-atualizar" id="esconder">
+                <img class="icone-botao-atualizar" src="{{ url_for('static', filename='images/icone-atualizar-escuro.png') }}">
             </button>
-            <button class="menu-botoes" id="esconder" name="action" value="direta">
-                <img class="icone-botao" src="{{ url_for('static', filename='images/icone-trocar.png') }}">
+        {% else %}
+            <h3>INTERNO</h3>
+            <label class="switch">
+                <input type="checkbox" name="tipo" value="interno" checked>
+                <span class="slider round"></span>
+            </label>
+            <h3>DIRETO</h3>
+            <label class="switch">
+                <input type="checkbox" name="tipo" value="direto" checked>
+                <span class="slider round"></span>
+            </label><br>
+            <button class="botao-atualizar" id="esconder">
+                <img class="icone-botao" src="{{ url_for('static', filename='images/icone-atualizar-escuro.png') }}">
             </button>
-        </form>
-    </h2>
-    <form method="POST" action="/abrirAgendaTeste">
-      <h3>INTERNO</h3>
-      <label class="switch">
-        <input type="checkbox" name="tipo" value="interno">
-        <span class="slider round"></span>
-      </label>
-      <h3>DIRETO</h3>
-      <label class="switch">
-        <input type="checkbox" name="tipo" value="direto">
-        <span class="slider round"></span>
-      </label>
-      <button class="menu-botoes" id="esconder">
-        <img class="icone-botao" src="{{ url_for('static', filename='images/icone-trocar.png') }}">
-    </button>
+        {% endif %}   
     </form>
-    <!-- Tabela interna -->
-    <table class="tebela-interno">
+    <!-- Titulos das tabelas -->
+    <h2 class="titulo-interno">RAMAIS</h2>
+    <table>
         <thead>
             <tr>
                 <th class="titulo-nome">Nome</th>

@@ -3,12 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Agenda de Ramais - MG</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleMenu.css') }}">
     <link rel="icon" href="https://www.grupocopobras.com.br/wp-content/uploads/2020/12/cropped-logo-site-2-32x32-1.png" sizes="32x32">
+
+
+    <!-- CSS -->
+    
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 </head>
 <body>
     <!-- Logo Copobras -->
-    <center><img class="logo" src="{{ url_for('static', filename='images/ai.png') }}"></center>
+    <div class="centralizar-logo">
+        <img class="logo" src="{{ url_for('static', filename='images/ai.png') }}">
+    </div>
     <div class="menu-esquerda" id="esconder">
         <h1 class="espaco-botao">&nbsp</h1>
         <form class="menu-botoes" method="post" id="esconder" action="{{ url_for('home') }}">
@@ -16,7 +27,7 @@
         </form>
         <h1 class="botao-atual">Agenda</h1>
     </div>
-    <div class="menu-direita" id="esconder">
+    <div class="menu-central" id="esconder">
         <!-- Pesquisar / filtrar -->
         <form class="menu-form" method="post" action="{{ url_for('filtrarAgenda') }}">
             <input class="menu-input" autocomplete=off placeholder="Buscar nome / ramal" type="text" id="pesquisar" name="pesquisar">
@@ -24,13 +35,67 @@
                 <img class="icone-botao" src="{{ url_for('static', filename='images/icone-pesquisa.png') }}">
             </button>
         </form>
+    </div>
+    <div class="menu-direita" id="esconder">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img class="icone-botao" src="{{ url_for('static', filename='images/icone-filtro.png') }}">
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <form method="POST" action="/abrirAgendaFiltrando">
+                    {% if ativados %}
+                        <h3>INTERNO</h3>
+                        <label class="switch">
+                            {% if ativados[0]=='interno' %}
+                                <input type="checkbox" name="tipo" value="interno" checked>
+                                <span class="slider round"></span>
+                            {% else %}
+                                <input type="checkbox" name="tipo" value="interno">
+                                <span class="slider round"></span>
+                            {% endif %}
+                        </label>
+                        <h3>DIRETO</h3>
+                        <label class="switch">
+                            {% if ativados[1]=='direto' %}
+                                <input type="checkbox" name="tipo" value="direto" checked>
+                                <span class="slider round"></span>
+                            {% elif ativados[0]=='direto' %}
+                                <input type="checkbox" name="tipo" value="direto" checked>
+                                <span class="slider round"></span>
+                            {% else %}
+                                <input type="checkbox" name="tipo" value="direto">
+                                <span class="slider round"></span>
+                            {% endif %}
+                        </label><br>
+                        <button class="botao-atualizar" id="esconder">
+                            <img class="icone-botao-atualizar" src="{{ url_for('static', filename='images/icone-atualizar-escuro.png') }}">
+                        </button>
+                    {% else %}
+                        <h3>INTERNO</h3>
+                        <label class="switch">
+                            <input type="checkbox" name="tipo" value="interno" checked>
+                            <span class="slider round"></span>
+                        </label>
+                        <h3>DIRETO</h3>
+                        <label class="switch">
+                            <input type="checkbox" name="tipo" value="direto" checked>
+                            <span class="slider round"></span>
+                        </label><br>
+                        <button class="botao-atualizar" id="esconder">
+                            <img class="icone-botao" src="{{ url_for('static', filename='images/icone-atualizar-escuro.png') }}">
+                        </button>
+                    {% endif %}   
+                </form>
+            </div>
+        </div>
         <!-- Imprimir -->
         <button class="menu-botao-imp" id="esconder" onclick="window.print()">
             <img class="icone-botao" src="{{ url_for('static', filename='images/icone-impressora2.png') }}">
         </button>
     </div>
+
     <!-- Excluir filtros -->
-    <form class="menu-form" method="post" action="{{ url_for('excluirFiltro') }}">
+    <form class="menu-filtro" method="post" action="{{ url_for('excluirFiltro') }}">
         {% if filtros %}
             <h3 class="titulo-filtro">FILTRAR POR:
                 {% for filtro in filtros %}
@@ -41,6 +106,7 @@
             </h3>
         {% endif %}
     </form>
+    <br>
     <!-- Titulos das tabelas -->
     <h2 class="titulo-interno">RAMAL INTERNO</h2>
     <h2 class="titulo-direto">RAMAL DIRETO</h2>

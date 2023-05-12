@@ -132,6 +132,10 @@ Pagina inicial
         width: 30px; 
         height: auto;
     }
+    .icone-botao-atualizar{
+        width: 20px; 
+        height: auto;
+    }
     
     .filtros{
         background-color: #363636;
@@ -218,7 +222,6 @@ Pagina inicial
         width: 100%;
         font-family: 'Arial';
         padding: 10;
-        
         margin-right: 1%;
         border: 2px solid #FED100;
         border-radius: 40px;
@@ -277,6 +280,22 @@ Pagina inicial
         transition: 0.3s;
     }
     .botao-editar:hover{
+        scale: 1.2;
+    }
+    .menu-filtrar{
+        align-items: center;
+        width: 100%;
+        text-align: center;
+    }
+    .botao-atualizar{
+        width: 100px;
+        height: 30px;
+        background-color: #FED100;
+        border-radius: 10px;
+        border: 0;
+        transition: 0.3s;
+    }
+    .botao-atualizar:hover{
         scale: 1.2;
     }
     .titulo-central{
