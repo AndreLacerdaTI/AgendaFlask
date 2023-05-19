@@ -1,10 +1,11 @@
 import sqlite3
 #from jinja2 import Template
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, send_file
 import os
 
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta'
+logado = []
 # rota principal
 @app.route('/')
 def index():
@@ -128,7 +129,7 @@ def paginaCadastroDireto():
 # Editar ----------------------------------------------------------------------------------
 
 # Abrindo a pagina de busca
-@app.route('/seach_term', methods=['POST'])
+@app.route('/search_term', methods=['POST'])
 def search_term():
     return render_template('search_form.html')
 
@@ -281,6 +282,22 @@ def search_results_table():
     #return render_template('search_results.html',search_results=str(listaFiltros[0]),resultado_ramal=str(listaFiltros[1]),resultado_setor=setor,tipo_ramal=listaFiltros[3])
     return render_template('search_results.html',search_results=str(listaFiltros[0]),resultado_ramal=str(listaFiltros[1]),resultado_setor=listaFiltros[2],id=listaFiltros[3],tipo_ramal=listaFiltros[4])
 '''
+@app.route('/buscar_ramal_search_select',  methods=['POST'])
+def buscar_ramal_search_select():
+    busca = request.form['busca_term']
+    rows = select_like(busca, str(busca))
+    return render_template('search_select.html', rows=rows)
+
+def select_like(int, str):
+    conn = sqlite3.connect('agenda.db')
+    c = conn.cursor()
+    #cur.execute('SELECT * FROM agendaInterna')
+    c.execute("SELECT nome, ramal, setor FROM agendaInterna WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (int,str))
+    rows = c.fetchall()
+    c.execute("SELECT nome, ramal, setor FROM agendaDireta WHERE ramal LIKE '%' || ? || '%' OR nome LIKE '%' || ? || '%'", (int,str))
+    rows.extend(c.fetchall())
+    conn.close()
+    return rows
 
 def select_id(int,str):
     if str=='interno':
@@ -392,6 +409,10 @@ def abrirAgendaFiltrando():
     print(filtros)
     rows = []
     rows2 = []
+    if (len(filtros)>1):
+        if (filtros[0]=='interno') and (filtros[1]=='direto'):
+            return abrirAgenda()
+        
     for i in filtros:
         if (i=='interno'):
             # Importando agenda interna
@@ -489,7 +510,7 @@ def excluirFiltro():
 def login():
     print('login')
     if 'logged_in' in session:
-        return render_template('admin.html')
+        return render_template('admin.html',nome=session['usuario'],acesso=session['nivel_acesso'])
     else:
         return render_template('login.html')
 
@@ -497,22 +518,25 @@ def login():
 def validarLogin():
     usuario = request.form['usuario']
     senha = request.form['senha']
-    users = ['Andre Lacerda',
-             'Wagner',
-             'Ana Elisa']
-    passwords = ['segurancati',
-                 'segurancati',
-                 'copomg23!@']
-    i = 0
-    while (i<len(users)):
-        print('user:')
-        print(users[i])
-        print('senha:')
-        print(passwords[i])
-        if (usuario==users[i])and(senha==passwords[i]):
-            session['logged_in'] = True
-            return render_template('admin.html', nome=usuario)
-        i = i+1
+    # Importando agenda interna
+    conn = sqlite3.connect('teste.db')
+    cur = conn.cursor()
+    #cur.execute('SELECT * FROM agendaInterna')
+    cur.execute('SELECT usuario, senha, acesso, id FROM usuarios ORDER BY usuario')
+    lista = cur.fetchall()
+    for i in lista:
+        if i[0]==usuario:
+            print('Usuario encontrado')
+            if (i[1]==senha):
+                print('Senha validada, acesso liberado!')
+                print('ID: ',i[3])
+                print('Nivel de acesso: ',i[2])
+                logado.append(i)
+                print('logado',logado)
+                session['logged_in'] = True
+                session['nivel_acesso'] = i[2]
+                session['usuario'] = usuario
+                return render_template('admin.html', nome=usuario, acesso=i[2], id=i[3])
     session.pop('logged_in', None)
     return render_template('login.html',mensagemRetorno='Usuario ou senha incorreto')
 
@@ -622,6 +646,24 @@ def renomearImagem():
     else:
         retorno = 'Arquivo não encontrado.'
         return render_template('editarBanner.html',mensagemRetorno=retorno)
+@app.route('/ti', methods=['POST'])
+def ti():
+    return render_template('TI.html')
+
+@app.route('/download')
+def download_file():
+    # Caminho para o arquivo que você deseja disponibilizar para download
+    path_to_file = '/static/download/teste.txt'
+
+    return "<a href='{{ url_for('get-file') }}'>Download</a>"
+
+@app.route('/get-file')
+def get_file():
+    # Caminho para o arquivo que você deseja disponibilizar para download
+    path_to_file = '/static/download/teste.txt'
+
+    # Envia o arquivo para o cliente
+    return send_file(path_to_file, as_attachment=True)
 
 if __name__ == '__main__':
     #app.run(host='192.168.20.125')

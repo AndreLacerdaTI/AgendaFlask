@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleEdit.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/Icones/icone-config.ico') }}" sizes="32x32">
     <title>Admin</title>
 </head>
 <body>
@@ -27,12 +28,24 @@
         <form method="post" action="{{ url_for('abrirAgenda') }}">
             <button type="submit" class="botao-cadastrar">Abrir agenda</button>
         </form><br>
-        <form method="post" action="{{ url_for('editarBanner') }}">
-            <button type="submit" class="botao-cadastrar">Editar Banners</button>
+        <form method="post" action="{{ url_for('ti') }}">
+            <button type="submit" class="botao-excluir">TI</button>
         </form><br>
         <form method="post" action="{{ url_for('logout') }}">
             <button type="submit" class="botao-excluir">Logoff</button>
         </form>
+        <!-- Definindo acessos niveis 2 e 3 -->
+        {% if acesso %}
+            {% if acesso>1 %}
+                <h1 class="active">Configurar Banners</h1>
+                <form method="post" action="{{ url_for('editarBanner') }}">
+                    <button type="submit" class="botao-cadastrar">Editar Banners</button>
+                </form><br>
+            {% endif %}
+            {% if acesso>2 %}
+                <h1 class="active">Administrar</h1>
+            {% endif %}
+        {% endif %}
         {% if mensagemRetorno %}
                 <p class="mensagem-retorno">{{mensagemRetorno}}</p>
         {% endif %}

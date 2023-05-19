@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Selecionar ramal</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleSearch.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/Icones/icone-config.ico') }}" sizes="32x32">
 </head>
 <body>
     <form class="form-voltar" method="post" action="{{ url_for('admin') }}">
@@ -12,15 +13,11 @@
     <h1></h1>
     <div class="menu-esquerda" id="esconder">
         <h1 class="espaco-botao">&nbsp</h1>
-        <form class="menu-botoes" method="post" name="tipo_filtro" action="{{ url_for('filtrarAgenda') }}">
-            <button class="menu-botoes">Interna</button>
-            <button class="menu-botoes">Direta</button>
-        </form>
-        <h1 class="botao-atual">Todos</h1>
+        <h1 class="botao-atual">Editar Agenda</h1>
     </div>
     <div class="menu-direita" id="esconder">
         <!-- Pesquisar / filtrar -->
-        <form class="menu-form" method="post" action="{{ url_for('search') }}">
+        <form class="menu-form" method="post" action="{{ url_for('buscar_ramal_search_select') }}">
             <input class="menu-input" autocomplete=off placeholder="Buscar nome / ramal" type="text" id="pesquisar" name="busca_term">
             <button class="menu-botoes-direita">
                 <img class="icone-botao" src="{{ url_for('static', filename='images/icone-pesquisa.png') }}">

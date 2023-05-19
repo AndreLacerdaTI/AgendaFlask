@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utilitarios TI</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ti.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/Icones/icone-config.ico') }}" sizes="32x32">
+</head>
+<body>
+    <h1>Utilitários para Download</h1>
+    <ul>
+        <li>
+            <a href="{{ url_for('static', filename='download/Limpar Spooler.bat') }}" download>
+                <button type="submit" class="botao-itens">
+                    <img class="icone-botao" src="{{ url_for('static', filename='images/icone-impressora2.png') }}">
+                    <br>Limpar Spooler</button>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('static', filename='download/Suporte Copobras TVC.exe') }}" download>
+                <button type="submit" class="botao-itens">
+                    <img class="icone-botao" src="{{ url_for('static', filename='images/Icones/team-viewer-logo.png') }}">
+                    <br>Suporte Copobras</button>
+            </a>
+        </li>
+    </ul>
+</body>
+</html>
