@@ -44,6 +44,9 @@
             {% endif %}
             {% if acesso>2 %}
                 <h1 class="active">Administrar</h1>
+                <form method="post" action="{{ url_for('tabela_ip') }}">
+                    <button type="submit" class="botao-cadastrar">Editar IPs</button>
+                </form><br>
             {% endif %}
         {% endif %}
         {% if mensagemRetorno %}

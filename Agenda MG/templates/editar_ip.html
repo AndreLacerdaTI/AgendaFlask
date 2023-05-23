@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleEdit.css') }}">
+    <title>Editar IP</title>
+</head>
+<body>
+    {% if dados %}
+        {% for i in dados %}
+            <label>ID</label>
+            <input value="{{ i[0] }}" disabled><br>
+            <label>IP: 192.168.20.</label>
+            <input value="{{ i[1] }}"><br>
+            <label>MAC</label>
+            <input value="{{ i[2] }}"><br>
+            <label>Usuario</label>
+            <input value="{{ i[3] }}"><br>
+            <label>HOST</label>
+            <input value="{{ i[4] }}"><br>
+            <label>Setor</label>
+            <input value="{{ i[5] }}"><br>
+            <label>DHCP</label>
+            <input value="{{ i[6] }}"><br>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

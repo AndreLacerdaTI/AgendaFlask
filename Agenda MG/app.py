@@ -665,6 +665,97 @@ def get_file():
     # Envia o arquivo para o cliente
     return send_file(path_to_file, as_attachment=True)
 
+@app.route('/tabela_ip', methods=['POST'])
+def tabela_ip():
+    import sqlite3
+    conexao = sqlite3.connect('tabelaIP.db')
+    c = conexao.cursor()
+    #c.execute('SELECT ip, mac, usuario, host, setor, dhcp FROM tabelaIP')
+    c.execute('SELECT * FROM tabelaIP ORDER BY ip')
+    tabelaIP = c.fetchall()
+    conexao.close()
+    #print(tabelaIP)
+    return render_template('tabelaip.html', tabela=tabelaIP)
+def testar_ip(valor):
+    """if isinstance(valor, int):
+        print("O valor é um inteiro.")
+    elif isinstance(valor, str):
+        print("O valor é uma string.")
+    else:
+        print("O valor não é um inteiro nem uma string.")"""
+    try:
+        valor_int = int(valor)
+        print("A conversão foi bem-sucedida. O valor inteiro é:", valor_int)
+        return valor_int
+    except ValueError:
+        print("A conversão falhou. Vamos testar se é um IP valido.")
+    if (len(valor)>3):
+        if (valor[:3]=='192'): # Começa com 192
+            print('É um IP') #192.168.20.1
+        if valor[:3]=='20.':
+            print('É uma pesquisa na faixa 20 com os numeros finais')
+            ip = valor[3:]
+            return ip
+        if (len(valor)>8): # Testando se vai até a 192.168.20.
+            if (valor[8:10]=='20'): # Testando se é faixa 20
+                print('É um ip faixa 20')
+                if (len(valor)>11): # Pegando apenas o valor do IP
+                    ip = valor[11:]
+                    print('IP final: ',ip)
+                    return ip
+        return None
+def testar_mac(valor):
+    if (valor[2:3]==':'):
+        print("É um MAC separado por :")
+        return valor
+    if (valor[2:3]=='-'):
+        print("É um MAC separado por -")
+        mac = valor.replace("-", ":")
+        return mac
+    return None
+def testar_pesquisa(str):
+    import sqlite3
+    conexao = sqlite3.connect('tabelaIP.db')
+    c = conexao.cursor()
+    c.execute("SELECT * FROM tabelaIP WHERE usuario LIKE '%' || ? || '%' OR setor LIKE '%' || ? || '%'", (str,str))
+    tabelaIP = c.fetchall()
+    conexao.close()
+    return tabelaIP
+@app.route('/filtrar_tabela_ip', methods=['POST'])
+def filtrar_tabela_ip():
+    dados = request.form['pesquisar']
+    if (dados==''):
+        return tabela_ip()
+    else:
+        ip = testar_ip(dados) # reduzindo ip para apenas os numeros finais
+        mac = testar_mac(dados) # formatando a pesquisa MAC
+        usuario_setor = testar_pesquisa(dados) # Buscando por correspondencias de usuario e setor
+        import sqlite3
+        conexao = sqlite3.connect('tabelaIP.db')
+        c = conexao.cursor()
+        #c.execute('SELECT ip, mac, usuario, host, setor, dhcp FROM tabelaIP')
+        #c.execute('SELECT * FROM tabelaIP WHERE ip = ? OR mac = ? OR usuario = ? OR setor = ? ORDER BY ip', (ip,mac,dados,dados))
+        c.execute('SELECT * FROM tabelaIP WHERE ip = ? OR mac = ? ORDER BY ip', (ip,mac))
+        tabela_IP_MAC = c.fetchall()
+        tabela = []
+        tabela.append(tabela_IP_MAC)
+        tabela.extend(usuario_setor)
+        conexao.close()
+        return render_template('tabelaip.html', tabela=tabela)
+
+@app.route('/editar_ip', methods=['POST'])
+def editar_ip():
+    dados = request.form['editar']
+    import sqlite3
+    conexao = sqlite3.connect('tabelaIP.db')
+    c = conexao.cursor()
+    #c.execute('SELECT ip, mac, usuario, host, setor, dhcp FROM tabelaIP')
+    #c.execute('SELECT * FROM tabelaIP ORDER BY ip')
+    c.execute("SELECT * FROM tabelaIP WHERE id = ?", (dados,))
+    tabelaIP = c.fetchall()
+    return render_template('editar_ip.html',dados=tabelaIP)
+
+
 if __name__ == '__main__':
     #app.run(host='192.168.20.125')
     app.run(debug=True)
