@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleIP.css') }}">
+    <title>Editar IP</title>
+</head>
+<body>
+    <div class="fundo-pagina">
+        <div class="fundo-editar">
+            <form class="form-voltar" method="post" action="{{ url_for('login') }}">
+                <button class="voltar-agenda"><img class="icone-voltar" src="{{ url_for('static', filename='images/icone-voltar.png') }}"></button>
+            </form>
+            {% if users %}
+                {% for user_name in users %}
+                    <form method="post" action="{{ url_for('selecionar_logins') }}">
+                        <button type="submit" class="botao-salvar" name="user" value="{{ user_name[0] }}">{{ user_name[0] }}</button>
+                    </form>
+                {% endfor %}
+            {% endif %}
+            {% if user_info %}
+                <form method="post" action="{{ url_for('salvar_edicao_logins') }}">
+                    <input class="input-id"  type="text" id="id" name="id" value="{{ user_info[3] }}" readonly><br>
+                    <label class="label-editar" for="usuario">Usuário</label>
+                    <div class="">
+                        <input class="input-editar" type="text" id="usuario" name="usuario" value="{{ user_info[0] }}" required><br><br>
+                    </div>
+                    <label class="label-editar" for="senha">Senha</label>
+                    <input class="input-editar" type="text" id="senha" name="senha" value="{{ user_info[1] }}" required><br><br>
+
+                    <label class="label-editar" for="acesso">Nível acesso</label>
+                    <input class="input-editar" type="text" id="acesso" name="acesso" value="{{ user_info[2] }}" required><br><br>
+
+                    <button type="submit" class="botao-salvar">Salvar</button>
+                </form>
+
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -519,7 +519,7 @@ def validarLogin():
     usuario = request.form['usuario']
     senha = request.form['senha']
     # Importando agenda interna
-    conn = sqlite3.connect('teste.db')
+    conn = sqlite3.connect('users.db')
     cur = conn.cursor()
     #cur.execute('SELECT * FROM agendaInterna')
     cur.execute('SELECT usuario, senha, acesso, id FROM usuarios ORDER BY usuario')
@@ -675,7 +675,7 @@ def tabela_ip():
     tabelaIP = c.fetchall()
     conexao.close()
     #print(tabelaIP)
-    return render_template('tabelaip.html', tabela=tabelaIP)
+    return render_template('tabelaip.html', tabela=tabelaIP,resultados=len(tabelaIP))
 def testar_ip(valor):
     """if isinstance(valor, int):
         print("O valor é um inteiro.")
@@ -714,13 +714,16 @@ def testar_mac(valor):
         return mac
     return None
 def testar_pesquisa(str):
+    print('Buscando correspondencia do usuario e host')
     import sqlite3
     conexao = sqlite3.connect('tabelaIP.db')
     c = conexao.cursor()
     c.execute("SELECT * FROM tabelaIP WHERE usuario LIKE '%' || ? || '%' OR setor LIKE '%' || ? || '%'", (str,str))
     tabelaIP = c.fetchall()
     conexao.close()
-    return tabelaIP
+    if (len(tabelaIP)!=0):
+        return tabelaIP
+    return None
 @app.route('/filtrar_tabela_ip', methods=['POST'])
 def filtrar_tabela_ip():
     dados = request.form['pesquisar']
@@ -730,6 +733,8 @@ def filtrar_tabela_ip():
         ip = testar_ip(dados) # reduzindo ip para apenas os numeros finais
         mac = testar_mac(dados) # formatando a pesquisa MAC
         usuario_setor = testar_pesquisa(dados) # Buscando por correspondencias de usuario e setor
+        if (ip==None) and (mac==None) and (usuario_setor==None):
+            return render_template('tabelaip.html',vazio='vazio')
         import sqlite3
         conexao = sqlite3.connect('tabelaIP.db')
         c = conexao.cursor()
@@ -738,10 +743,49 @@ def filtrar_tabela_ip():
         c.execute('SELECT * FROM tabelaIP WHERE ip = ? OR mac = ? ORDER BY ip', (ip,mac))
         tabela_IP_MAC = c.fetchall()
         tabela = []
-        tabela.append(tabela_IP_MAC)
-        tabela.extend(usuario_setor)
+        tabela.extend(tabela_IP_MAC)
+        if (usuario_setor!=None):
+            tabela.extend(usuario_setor)
         conexao.close()
-        return render_template('tabelaip.html', tabela=tabela)
+        if (len(tabela) == 1):
+            if(tabela[0]==[]):
+                print('vazio')
+                return render_template('tabelaip.html',vazio='vazio')
+        print(tabela)
+        return render_template('tabelaip.html', tabela=tabela,resultados=len(tabela))
+
+@app.route('/filtrar_ip_livre_ocupado', methods=['POST'])
+def filtrar_ip_livre_ocupado():
+    filtros = request.form.getlist('estado')
+    if (filtros==''):
+        filtros = ['usados','livres']
+    print(filtros)
+    tabela = []
+    tabela2 = []
+    if (len(filtros)>1):
+        if (filtros[0]=='usados') and (filtros[1]=='livres'):
+            return tabela_ip()
+        
+    for i in filtros:
+        if (i=='usados'):
+            # Importando agenda interna
+            conn = sqlite3.connect('tabelaIP.db')
+            cur = conn.cursor()
+            cur.execute('SELECT * FROM tabelaIP WHERE mac IS NOT NULL OR usuario IS NOT NULL ORDER BY ip')
+            tabela = cur.fetchall()
+        # Importando agenda direta
+        if(i=='livres'):
+            usuario = None
+            mac = None
+            conexao = sqlite3.connect('tabelaIP.db')
+            c = conexao.cursor()
+            c.execute('SELECT * FROM tabelaIP WHERE usuario IS NULL OR mac IS NULL ORDER BY ip')
+            #c.execute('SELECT * FROM tabelaIP')
+            tabela2 = c.fetchall()
+    tabela.extend(tabela2)
+    print(tabela)
+    return render_template('tabelaIP.html', tabela=tabela, ativados=filtros,resultados=len(tabela))
+
 
 @app.route('/editar_ip', methods=['POST'])
 def editar_ip():
@@ -755,6 +799,76 @@ def editar_ip():
     tabelaIP = c.fetchall()
     return render_template('editar_ip.html',dados=tabelaIP)
 
+@app.route('/salvar_edicao_ip', methods=['POST'])
+def salvar_edicao_ip():
+    id_ip = request.form['id_ip']
+    ip = request.form['ip']
+    ip = ip[11:] # Removendo o "192.168.20." para salvar apenas o ip final
+    mac = request.form['mac']
+    usuario = request.form['usuario']
+    host = request.form['host']
+    setor = request.form['setor']
+    dhcp = request.form['dhcp']
+    if (request.form['mac']=='')or(request.form['mac']=='None'): # Conferindo se o MAC veio em branco ou NoneType
+        mac = None
+    if (request.form['usuario']=='')or(request.form['usuario']=='None'): # Conferindo se o usuario veio em branco ou NoneType
+        usuario = None
+    if (request.form['host']=='')or(request.form['host']=='None'): # Conferindo se o host veio em branco ou NoneType
+        host = None
+    if (request.form['setor']=='')or(request.form['setor']=='None'): # Conferindo se o setor veio em branco ou NoneType
+        setor = None
+    if (request.form['dhcp']=='')or(request.form['dhcp']=='None'): # Conferindo se o dhcp veio em branco ou NoneType
+        dhcp = None
+    conexao = sqlite3.connect('tabelaIP.db')
+    c = conexao.cursor()
+    c.execute('UPDATE tabelaIP SET ip = ?, mac = ?, usuario = ?, host = ?, setor = ?, dhcp = ? WHERE id = ?', (ip, mac, usuario, host, setor, dhcp, id_ip))
+    conexao.commit()
+    conexao.close()
+
+    #return render_template('login.html',mensagemRetorno='Alteração concluida')
+    return login()
+
+def buscar_login():
+    # Importando agenda interna
+    conn = sqlite3.connect('users.db')
+    cur = conn.cursor()
+    #cur.execute('SELECT * FROM agendaInterna')
+    cur.execute('SELECT usuario, senha, acesso, id FROM usuarios ORDER BY usuario')
+    return cur.fetchall()
+
+@app.route('/editar_logins', methods=['POST'])
+def editar_logins():
+    lista = buscar_login()
+    return render_template('editar_logins.html',users=lista)
+
+@app.route('/selecionar_logins', methods=['POST'])
+def selecionar_logins():
+    user = request.form['user']
+    lista = buscar_login()
+    for i in lista:
+        if (user==i[0]):
+            return render_template('editar_logins.html',user_info=i)
+        print(i)
+    return render_template('editar_logins.html')
+
+@app.route('/salvar_edicao_logins', methods=['POST'])
+def salvar_edicao_logins():
+    id = request.form['id']
+    usuario = request.form['usuario']
+    senha = request.form['senha']
+    acesso = request.form['acesso']
+    # Importando
+    conn = sqlite3.connect('users.db')
+    cur = conn.cursor()
+    #cur.execute('SELECT * FROM agendaInterna')
+    #cur.execute('SELECT usuario, senha, acesso, id FROM usuarios ORDER BY usuario')
+    cur.execute('UPDATE usuarios SET usuario = ?, senha = ?, acesso = ? WHERE id = ?', (usuario, senha, acesso, id))
+    info = cur.fetchall()
+    print(info)
+    conn.commit()
+    conn.close()
+
+    return login()
 
 if __name__ == '__main__':
     #app.run(host='192.168.20.125')

@@ -9,7 +9,7 @@
     <title>Admin</title>
 </head>
 <body>
-    <div class="login">
+    <div class="fundo-admin">
         <form class="form-voltar" method="post" action="{{ url_for('abrirAgenda') }}">
             <button class="voltar-agenda">
                 <img class="icone-voltar" src="{{ url_for('static', filename='images/icone-voltar.png') }}">
@@ -28,24 +28,27 @@
         <form method="post" action="{{ url_for('abrirAgenda') }}">
             <button type="submit" class="botao-cadastrar">Abrir agenda</button>
         </form><br>
-        <form method="post" action="{{ url_for('ti') }}">
-            <button type="submit" class="botao-excluir">TI</button>
-        </form><br>
         <form method="post" action="{{ url_for('logout') }}">
             <button type="submit" class="botao-excluir">Logoff</button>
         </form>
         <!-- Definindo acessos niveis 2 e 3 -->
         {% if acesso %}
             {% if acesso>1 %}
-                <h1 class="active">Configurar Banners</h1>
+                <h1 class="active">Endomarketing</h1>
                 <form method="post" action="{{ url_for('editarBanner') }}">
                     <button type="submit" class="botao-cadastrar">Editar Banners</button>
                 </form><br>
             {% endif %}
             {% if acesso>2 %}
                 <h1 class="active">Administrar</h1>
+                <form method="post" action="{{ url_for('ti') }}">
+                    <button type="submit" class="botao-excluir">TI</button>
+                </form><br>
                 <form method="post" action="{{ url_for('tabela_ip') }}">
-                    <button type="submit" class="botao-cadastrar">Editar IPs</button>
+                    <button type="submit" class="botao-cadastrar">IP's</button>
+                </form><br>
+                <form method="post" action="{{ url_for('editar_logins') }}">
+                    <button type="submit" class="botao-cadastrar">Acessos usuarios</button>
                 </form><br>
             {% endif %}
         {% endif %}

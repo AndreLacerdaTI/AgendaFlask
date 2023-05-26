@@ -75,6 +75,17 @@ h3 {
 .espacamento{
     margin: 10px;
 }
+.fundo-admin{
+    position: relative;
+    height: 1000px;
+    width: 405px;
+    margin: auto;
+    padding: 60px 60px;
+    background: url(https://picsum.photos/id/1004/5616/3744) no-repeat   center center #505050;   
+    background-size: cover;
+    box-shadow: 0px 30px 60px -5px #000000a5;
+    text-align: center;
+}
 
 .login {
     position: relative;

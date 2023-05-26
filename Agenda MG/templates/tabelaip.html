@@ -15,28 +15,28 @@
                     <img class="icone-botao" src="{{ url_for('static', filename='images/icone-filtro.png') }}">
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <form method="POST" action="/abrirAgendaFiltrando">
+                    <form method="POST" action="/filtrar_ip_livre_ocupado">
                         {% if ativados %}
-                            <h3>INTERNO</h3>
+                            <h3>EM USO</h3>
                             <label class="switch">
-                                {% if ativados[0]=='interno' %}
-                                    <input type="checkbox" name="tipo" value="interno" checked>
+                                {% if ativados[0]=='usados' %}
+                                    <input type="checkbox" name="estado" value="usados" checked>
                                     <span class="slider round"></span>
                                 {% else %}
-                                    <input type="checkbox" name="tipo" value="interno">
+                                    <input type="checkbox" name="estado" value="usados">
                                     <span class="slider round"></span>
                                 {% endif %}
                             </label>
-                            <h3>DIRETO</h3>
+                            <h3>LIVRES</h3>
                             <label class="switch">
-                                {% if ativados[1]=='direto' %}
-                                    <input type="checkbox" name="tipo" value="direto" checked>
+                                {% if ativados[1]=='livres' %}
+                                    <input type="checkbox" name="estado" value="livres" checked>
                                     <span class="slider round"></span>
-                                {% elif ativados[0]=='direto' %}
-                                    <input type="checkbox" name="tipo" value="direto" checked>
+                                {% elif ativados[0]=='livres' %}
+                                    <input type="checkbox" name="estado" value="livres" checked>
                                     <span class="slider round"></span>
                                 {% else %}
-                                    <input type="checkbox" name="tipo" value="direto">
+                                    <input type="checkbox" name="estado" value="livres">
                                     <span class="slider round"></span>
                                 {% endif %}
                             </label><br>
@@ -44,14 +44,14 @@
                                 <img class="icone-botao-atualizar" src="{{ url_for('static', filename='images/icone-atualizar-escuro.png') }}">
                             </button>
                         {% else %}
-                            <h3>INTERNO</h3>
+                            <h3>EM USO</h3>
                             <label class="switch">
-                                <input type="checkbox" name="tipo" value="interno" checked>
+                                <input type="checkbox" name="estado" value="usados" checked>
                                 <span class="slider round"></span>
                             </label>
-                            <h3>DIRETO</h3>
+                            <h3>LIVRES</h3>
                             <label class="switch">
-                                <input type="checkbox" name="tipo" value="direto" checked>
+                                <input type="checkbox" name="estado" value="livres" checked>
                                 <span class="slider round"></span>
                             </label><br>
                             <button class="botao-atualizar" id="esconder">
@@ -70,7 +70,11 @@
             </form>
         </div>
     </div>
-    <h2 class="titulo-interno">Tabela de IP</h2>
+    {% if ativados %}
+        <h2>Tabela de IP{{"'s "+ ativados[0] }}</h2>
+    {% else %}
+        <h2>Tabela de IP</h2>
+    {% endif %}
     <table>
         <thead>
             <tr>
@@ -79,7 +83,8 @@
                 <th class="titulo-central">Usuario</th>
                 <th class="titulo-central">HOST</th>
                 <th class="titulo-central">Setor</th>
-                <th class="titulo-direita">DHCP&nbsp;&nbsp;</th>
+                <th class="titulo-central">DHCP</th>
+                <th class="titulo-direita">Editar&nbsp;&nbsp;</th>
             </tr>
         </thead>
         <tbody>
@@ -90,6 +95,7 @@
                         <td>{{ i[3] }}</td>
                         <td>{{ i[4] }}</td>
                         <td>{{ i[5] }}</td>
+                        <td>{{ i[6] }}</td>
                         <td>
                             <form method="post" action="{{ url_for('editar_ip') }}">
                                 <button class="botao-editar" name="editar" value="{{i[0]}}">
@@ -99,7 +105,16 @@
                         </td>
                     </tr>
             {% endfor %}
-            <td class="rodape-tabela">&nbsp;&nbsp;</td>
+            <tr class="rodape-tabela"><td class="rodape-tabela">&nbsp;&nbsp;</td></tr>
+            <tr class="rodape-tabela">
+                <td class="rodape-tabela">
+                    {% if vazio %}
+                        Sem resultados
+                    {% else %}
+                        Total: {{resultados}}
+                    {%endif%}
+                </td>
+            </tr>
         </tbody>
     </table>
 </body>

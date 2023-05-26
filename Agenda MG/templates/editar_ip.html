@@ -4,27 +4,43 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleEdit.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleIP.css') }}">
     <title>Editar IP</title>
 </head>
 <body>
-    {% if dados %}
-        {% for i in dados %}
-            <label>ID</label>
-            <input value="{{ i[0] }}" disabled><br>
-            <label>IP: 192.168.20.</label>
-            <input value="{{ i[1] }}"><br>
-            <label>MAC</label>
-            <input value="{{ i[2] }}"><br>
-            <label>Usuario</label>
-            <input value="{{ i[3] }}"><br>
-            <label>HOST</label>
-            <input value="{{ i[4] }}"><br>
-            <label>Setor</label>
-            <input value="{{ i[5] }}"><br>
-            <label>DHCP</label>
-            <input value="{{ i[6] }}"><br>
-        {% endfor %}
-    {% endif %}
+    <div class="fundo-pagina">
+        <div class="fundo-editar">
+            <form class="form-voltar" method="post" action="{{ url_for('login') }}">
+                <button class="voltar-agenda"><img class="icone-voltar" src="{{ url_for('static', filename='images/icone-voltar.png') }}"></button>
+            </form>
+            <h2>Editar IP</h2>
+            {% if dados %}
+                {% for i in dados %}
+                    <form method="post" action="{{ url_for('salvar_edicao_ip') }}">
+                        <label class="label-editar">ID</label>
+                        <input class="input-disabled" type="text" value="{{ i[0] }}" name="id_ip" readonly><br>
+                        <label class="label-editar">IP</label>
+                        <input class="input-editar" type="text" value="192.168.20.{{ i[1] }}" name="ip" readonly><br>
+                        <label class="label-editar">MAC</label>
+                        <input class="input-editar" value="{{ i[2] }}" name="mac"><br>
+                        <label class="label-editar">Usuario</label>
+                        <input class="input-editar" value="{{ i[3] }}" name="usuario"><br>
+                        <label class="label-editar">HOST</label>
+                        <input class="input-editar" value="{{ i[4] }}" name="host"><br>
+                        <label class="label-editar">Setor</label>
+                        <input class="input-editar" value="{{ i[5] }}" name="setor"><br>
+                        <label class="label-editar">DHCP</label>
+                        <input class="input-editar" type="text" value="{{ i[6] }}" name="dhcp"><br>
+                        <button type="submit" class="botao-salvar">Salvar</button>
+                    </form><br>
+                    <form method="post" action="{{ url_for('login') }}">
+                        <button type="submit" class="botao-cancelar">Cancelar</button>
+                    </form>
+                {% endfor %}
+            {% else %}
+                <label>Erro interno: Banco de dados</label>
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>
