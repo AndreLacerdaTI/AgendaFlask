@@ -10,11 +10,19 @@
 </head>
 <body>
     <div class="fundo-admin">
+        <!-- Voltar para a Agenda -->
         <form class="form-voltar" method="post" action="{{ url_for('abrirAgenda') }}">
             <button class="voltar-agenda">
                 <img class="icone-voltar" src="{{ url_for('static', filename='images/icone-voltar.png') }}">
             </button>
         </form>
+        <!-- Fazer logoff -->
+        <form class="form-logoff" method="post" action="{{ url_for('logout') }}"> 
+            <button class="voltar-agenda">
+                <img class="icone-voltar" src="{{ url_for('static', filename='images/icone-logoff.png') }}">
+            </button>
+        </form>
+        <!-- Acesso nivel 1 - Agenda -->
         {% if nome %}
             <h1 class="mensagem">Bem vindo {{nome}}!</h1>
         {% endif %}
@@ -28,27 +36,29 @@
         <form method="post" action="{{ url_for('abrirAgenda') }}">
             <button type="submit" class="botao-cadastrar">Abrir agenda</button>
         </form><br>
-        <form method="post" action="{{ url_for('logout') }}">
-            <button type="submit" class="botao-excluir">Logoff</button>
-        </form>
         <!-- Definindo acessos niveis 2 e 3 -->
+        <!-- Acesso nivel 2 - Endomarketing -->
         {% if acesso %}
             {% if acesso>1 %}
-                <h1 class="active">Endomarketing</h1>
+                <h1 class="endomarketing">Endomarketing</h1>
                 <form method="post" action="{{ url_for('editarBanner') }}">
-                    <button type="submit" class="botao-cadastrar">Editar Banners</button>
+                    <button type="submit" class="botao-endomarketing">Editar Banners</button>
                 </form><br>
             {% endif %}
+            <!-- Acesso nivel 3 - TI -->
             {% if acesso>2 %}
-                <h1 class="active">Administrar</h1>
+                <h1 class="administrar">Administrar</h1>
                 <form method="post" action="{{ url_for('ti') }}">
-                    <button type="submit" class="botao-excluir">TI</button>
+                    <button type="submit" class="botao-ti">Utilitários</button>
                 </form><br>
                 <form method="post" action="{{ url_for('tabela_ip') }}">
-                    <button type="submit" class="botao-cadastrar">IP's</button>
+                    <button type="submit" class="botao-ti">IP's</button>
                 </form><br>
                 <form method="post" action="{{ url_for('editar_logins') }}">
-                    <button type="submit" class="botao-cadastrar">Acessos usuarios</button>
+                    <button type="submit" class="botao-ti">Usuarios agenda</button>
+                </form><br>
+                <form method="post" action="{{ url_for('usuarios_wts') }}">
+                    <button type="submit" class="botao-ti">Usuarios SIGGI</button>
                 </form><br>
             {% endif %}
         {% endif %}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleWts.css') }}">
+    <title>Editar IP</title>
+</head>
+<body>
+    <div class="fundo-pagina">
+        <div class="fundo-editar">
+            <form class="form-voltar" method="post" action="{{ url_for('login') }}">
+                <button class="voltar-agenda"><img class="icone-voltar" src="{{ url_for('static', filename='images/icone-voltar.png') }}"></button>
+            </form>
+            <h2 class="">Editar WTS</h2>
+            {% if dados %}
+                {% for i in dados %}
+                    <form method="post" action="{{ url_for('salvar_edicao_usuarios_wts') }}">
+                        <label class="label-editar">ID</label>
+                        <input class="input-disabled" type="text" value="{{ i[0] }}" name="id" readonly><br>
+                        <label class="label-editar">Usuario</label>
+                        <input class="input-editar" value="{{ i[1] }}" name="usuario"><br>
+                        <label class="label-editar">Senha</label>
+                        <input class="input-editar" value="{{ i[2] }}" name="senha"><br>
+                        <label class="label-editar">Setor</label>
+                        <input class="input-editar" value="{{ i[3] }}" name="setor"><br>
+                        {% if i[4]==None %}
+                            <label class="label-editar">IP</label>
+                            <input class="input-editar" type="text" value="None" name="ip"><br>
+                        {% else %}
+                            <label class="label-editar">IP</label>
+                            <input class="input-editar" type="text" value="192.168.20.{{ i[4] }}" name="ip"><br>
+                        {% endif %}
+                        <button type="submit" class="botao-salvar">Salvar</button>
+                    </form><br>
+                    <form method="post" action="{{ url_for('login') }}">
+                        <button type="submit" class="botao-cancelar">Cancelar</button>
+                    </form>
+                {% endfor %}
+            {% else %}
+                <label>Erro interno: Banco de dados</label>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

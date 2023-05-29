@@ -870,6 +870,78 @@ def salvar_edicao_logins():
 
     return login()
 
+@app.route('/criar_novo_login', methods=['POST'])
+def criar_novo_login():
+    user_new = 'novo'
+    return render_template('editar_logins.html', user_new=user_new)
+
+@app.route('/salvar_novo_login', methods=['POST'])
+def salvar_novo_login():
+    usuario = request.form['usuario']
+    senha = request.form['senha']
+    acesso = request.form['acesso']
+
+    conn = sqlite3.connect('users.db')
+    cur = conn.cursor()
+    cur.execute("INSERT INTO usuarios (usuario, senha, acesso) VALUES (?, ?, ?)", (usuario, senha, acesso))
+    conn.commit()
+    conn.close()
+
+    return login()
+
+@app.route('/usuarios_wts', methods=['POST'])
+def usuarios_wts():
+    import sqlite3
+    conexao = sqlite3.connect('tabelaWts.db')
+    c = conexao.cursor()
+    #c.execute('SELECT ip, mac, usuario, host, setor, dhcp FROM tabelaIP')
+    c.execute('SELECT * FROM tabelaWts ORDER BY id AND usuario')
+    tabelaWts = c.fetchall()
+    conexao.close()
+    #print(tabelaIP)
+    return render_template('usuarios_wts.html', tabela=tabelaWts,resultados=len(tabelaWts))
+
+@app.route('/editar_usuarios_wts', methods=['POST'])
+def editar_usuarios_wts():
+    dados = request.form['editar']
+    import sqlite3
+    conexao = sqlite3.connect('tabelaWts.db')
+    c = conexao.cursor()
+    c.execute('SELECT * FROM tabelaWts WHERE id = ?', (dados,))
+    tabelaWts = c.fetchall()
+    conexao.close()
+    return render_template('editar_wts.html', dados=tabelaWts)
+
+@app.route('/salvar_edicao_usuarios_wts', methods=['POST'])
+def salvar_edicao_usuarios_wts():
+    id = request.form['id']
+    usuario = request.form['usuario']
+    senha = request.form['senha']
+    setor = request.form['setor']
+    ip = request.form['ip']
+    ip = ip[11:]
+
+    # Importando banco de dados
+    conn = sqlite3.connect('tabelaWts.db')
+    cur = conn.cursor()
+    cur.execute('UPDATE tabelaWts SET usuario = ?, senha = ?, setor = ?, ip = ? WHERE id = ?', (usuario, senha, setor, ip, id))
+    info = cur.fetchall()
+    print(info)
+    conn.commit()
+    conn.close()
+
+    return login()
+
+@app.route('/usuarios_wts_ip', methods=['POST']) # Buscar qual a localização / pc está usando o usuario SIGGI
+def usuarios_wts_ip():
+    dados = request.form['id_ip']
+    import sqlite3
+    conexao = sqlite3.connect('tabelaIP.db')
+    c = conexao.cursor()
+    c.execute('SELECT * FROM tabelaIP WHERE ip = ? ORDER BY ip', (dados,))
+    tabela = c.fetchall()
+    return render_template('tabelaip.html',tabela=tabela)
+
 if __name__ == '__main__':
     #app.run(host='192.168.20.125')
     app.run(debug=True)

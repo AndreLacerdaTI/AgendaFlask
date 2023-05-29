@@ -1,6 +1,11 @@
 body{
     background-color: #bdbdbd;
 }
+.form-logoff{
+    position: absolute;
+    right: 10px;
+    top: 15px;
+}
 
 .form-voltar{
     position: absolute;
@@ -101,6 +106,36 @@ h3 {
 
 .active {
     border-bottom: 2px solid #FED100;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #ffffff00;
+    padding-left: 12px;
+    font-size: 22px;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+    letter-spacing: 2px;
+    display: inline-block;
+    font-weight: 100;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.endomarketing {
+    border-bottom: 2px solid #ff8800;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #ffffff00;
+    padding-left: 12px;
+    font-size: 22px;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+    letter-spacing: 2px;
+    display: inline-block;
+    font-weight: 100;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.administrar {
+    border-bottom: 2px solid #fe0000;
     text-decoration: none;
     color: #ffffff;
     background-color: #ffffff00;
@@ -215,6 +250,47 @@ input{
 }
 .botao-cadastrar:hover{
     border: 2px solid #FED100;
+    font-weight: bold;
+}
+.botao-endomarketing{
+    width: 60%;
+    height: 40px;
+    border-radius: 23px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0);
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.2);
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    transition: 0.3s;
+    padding: 10px 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+.botao-endomarketing:hover{
+    border: 2px solid #ff8800;
+    font-weight: bold;
+}
+
+.botao-ti{
+    width: 60%;
+    height: 40px;
+    border-radius: 23px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0);
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.2);
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    transition: 0.3s;
+    padding: 10px 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+.botao-ti:hover{
+    border: 2px solid #ff0000;
     font-weight: bold;
 }
 

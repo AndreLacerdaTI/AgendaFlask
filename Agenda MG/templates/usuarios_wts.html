@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleWts.css') }}">
+    <title>Usuarios SIGGI</title>
+</head>
+<body>
+    <h2>Usuarios SIGGI / WTS</h2>
+    <table>
+        <thead>
+            <tr>
+                <th class="titulo-esquerda">ID</th>
+                <th class="titulo-central">Usuario</th>
+                <th class="titulo-central">Senha</th>
+                <th class="titulo-central">Setor</th>
+                <th class="titulo-central">Localização</th>
+                <th class="titulo-direita">Editar&nbsp;&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in tabela %}
+                    <tr class="linha-tabela">
+                        <td>{{ i[0] }}</td>
+                        <td>{{ i[1] }}</td>
+                        <td>{{ i[2] }}</td>
+                        <td>{{ i[3] }}</td>
+                        <td>
+                            <form method="post" action="{{ url_for('usuarios_wts_ip') }}">
+                                <button class="botao-editar" name="id_ip" value="{{i[4]}}">
+                                    <img class="icone-botao" src="{{ url_for('static', filename='images/icone-pc-user.png') }}">
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="post" action="{{ url_for('editar_usuarios_wts') }}">
+                                <button class="botao-editar" name="editar" value="{{i[0]}}">
+                                    <img class="icone-botao" src="{{ url_for('static', filename='images/icone-editar-branco.png') }}">
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+            {% endfor %}
+            <tr class="rodape-tabela"><td class="rodape-tabela">&nbsp;&nbsp;</td></tr>
+        </tbody>
+    </table>
+    
+</body>
+</html>
