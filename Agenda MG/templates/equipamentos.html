@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt" id="meuElemento">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleEquipamentos.css') }}">
+    <title>Equipamentos</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if licenca %}
+            {% if messages %}
+                <div class="fundo"></div>
+                <div class="flash-message">
+                    {% for i in messages %}
+                            <span class="item">SIGGI: {{ info_equipamento[1] }}</span><br>
+                            <span class="item">Usuario: {{ info_equipamento[4]}}</span><br>
+                            <span class="item">IP: 192.168.20.{{ info_equipamento[3]}}</span><br>
+                            <br>
+                            <br>
+                            <div class="box-licenca">
+                                <span class="itens-licença">ID: {{ i[0] }}</span><br>
+                                <span class="itens-licença">Licença: {{ i[1] }}</span><br>
+                                <span class="itens-licença">Chave: {{ i[2] }}</span><br>
+                                <span class="itens-licença">ID Microsoft: {{ i[3] }}</span><br>
+                                <span class="itens-licença">NF: {{ i[4] }}</span><br>
+                                <span class="itens-licença">Fornecedor: {{ i[5] }}</span><br>
+                            </div>
+                            <form method="post" action="{{ url_for('copiar_licenca') }}">
+                                <button class="botao-copiar" name="id_licenca" value={{licenca[0]}} title="Copiar licença">
+                                    {% if versao=='windows-7' %}
+                                        <img class="icone-windows" src="{{ url_for('static', filename='images/icone-windows-7.png') }}">
+                                    {% elif versao=='windows-10' %}
+                                        <img class="icone-windows" src="{{ url_for('static', filename='images/icone-windows-10.png') }}">
+                                    {% elif versao=='windows-11' %}
+                                        <img class="icone-windows" src="{{ url_for('static', filename='images/icone-windows-11.png') }}">
+                                    {% endif %}
+                                </button>
+                            </form>
+                    {% endfor %}
+                    <form class="menu-form" method="post" action="{{ url_for('listar_equipamentos') }}">
+                        <button class="close-flash" onclick="fecharMensagemFlash()" onkeypress="fecharMensagemAoPressionarEnter(event)" title="Fechar mensagem">
+                            <img class="icone-fechar" src="{{ url_for('static', filename='images/icone-fechar-mensagem.png') }}">
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+        {% endif %}
+        {% if equipamento %}
+            <div class="fundo"></div>
+            <div class="flash-message">
+                <div class="box">
+                    <form class="menu-form" method="post" action="{{ url_for('listar_equipamentos') }}">
+                        <button class="close-flash" onclick="fecharMensagemFlash()" onkeypress="checarEnter(event)" title="Fechar">
+                            <img class="icone-fechar" src="{{ url_for('static', filename='images/icone-fechar-mensagem.png') }}">
+                        </button>
+                    </form>
+                    <form class="editar-equipamento" method="post" action="{{ url_for('salvar_alteracoes_equipamento') }}">
+                            <label class="label-editar" for="usuario">Usuario</label><br>
+                            <input class="input-editar" type="text" name="usuario" id="usuario" placeholder="{{ equipamento[4] }}" value="{{equipamento[4]}}"><br>
+                            <label class="label-editar" for="tipo-select">Tipo de equipamento</label><br>
+                            <select class="input-editar" name="tipo_equipamento" id="tipo-select">
+                                <option disabled selected value="{{ equipamento[2] }}">{{equipamento[2]}}</option>
+                                <option value="Desktop">Desktop</option>
+                                <option value="Desktop Montado">Desktop Montado</option>
+                                <option value="Desktop Montado">Notebook</option>
+                            </select><br>
+                            <label class="label-editar" for="ip">IP</label><br>
+                            <input class="input-editar" type="text" name="ip" id="ip" placeholder="192.168.20.{{ equipamento[3] }}" value="192.168.20.{{equipamento[3]}}"><br>
+                            <label class="label-editar" for="licenca-select">Licença</label><br>
+                            <select class="input-editar" name="licencas" id="licenca-select">
+                                <option disabled value="{{ equipamento[5] }}">Chave de ativação</option>
+                                {% for licenca in licencas %}
+                                    {% if licenca[0]==equipamento[5]%}
+                                        <option selected class="item-atual" value="{{ licenca[0] }}">{{ licenca[2] }}</option>
+                                    {% else %}
+                                        <option value="{{ licenca[0] }}">{{ licenca[2] }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select><br>
+                            <button class="botoes-flash" name="acao" value="salvar" title="Salvar alterações">
+                                Salvar
+                            </button>
+                            <button class="botoes-flash" name="acao" value="cancelar" title="Cancelar alterações">
+                                Cancelar
+                            </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+        {% if notificacao %}
+            <div class="fundo"></div>
+            <div class="flash-message">
+                <div class="box">
+                    <span>{{ notificacao }}</span>
+                    <form class="menu-form" method="post" action="{{ url_for('listar_equipamentos') }}">
+                        <button autofocus class="close-flash" onclick="fecharMensagemFlash()" onkeypress="checarEnter(event)" title="Fechar mensagem">
+                            <img class="icone-fechar" src="{{ url_for('static', filename='images/icone-fechar-mensagem.png') }}">
+                        </button>
+                    </form>
+                </div>
+                <br>
+                <br>
+                <span class="instrucao-fechar">Tecle enter para fechar</span>
+            </div>
+        {% endif %}
+        {% if menu_lateral=='ativo' %}
+            <div class="fundo-transparente">
+                <form class="menu-form-lateral" method="post" action="{{ url_for('listar_equipamentos') }}" title="Fechar">
+                    <button class="botao-fechar-menu-lateral">
+                        <img class="icone-botao-menu-lateral" src="{{ url_for('static', filename='images/icone-fechar-menu-lateral.png') }}">
+                    </button>
+                </form>
+                <div class="menu-lateral">
+                    <h3>Mais opções</h3>
+                    <form  method="post" action="{{ url_for('listar_equipamentos') }}" title="Fechar">
+                        <button class="botoes-menu-lateral">
+                            Cadastrar equipamento
+                        </button>
+                    </form>
+                    <form  method="post" action="{{ url_for('listar_equipamentos') }}" title="Fechar">
+                        <button class="botoes-menu-lateral">
+                            Cadastrar licença
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+    {% block content %}
+        <div class="logo">
+            <img class="icone-logo" src="{{ url_for('static', filename='images/ai-branco.png') }}">
+        </div>
+        <div class="menu">
+            <div class="menu-direita">
+                <form class="menu-form-botoes" method="post" action="{{ url_for('home') }}">
+                    <button class="menu-botoes" title="Ir para a Página Inicial">
+                        Pagina Inicial
+                    </button>
+                </form>
+                <span class="divisor">></span>
+                <form class="menu-form-botoes" method="post" action="{{ url_for('login') }}">
+                    <button class="menu-botoes" title="Ir para página de Administrador">
+                        Administrador
+                    </button>
+                </form>
+                <span class="divisor">></span>
+                <form class="menu-form-botoes" method="post" action="{{ url_for('listar_equipamentos') }}" title="Atualizar pagina atual">
+                    <button class="menu-botoes-ativos">
+                        Equipamentos e licenças
+                    </button>
+                </form>
+            </div>
+            <div class="menu-esquerda">
+                <form class="menu-form-botoes-canto" method="post" action="{{ url_for('abrir_menu_lateral') }}" title="Mais opções">
+                    <button class="menu-botoes">
+                        <img class="icone-botao-tabela" src="{{ url_for('static', filename='images/icone-menu-lateral.png') }}">
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <form class="menu-form" method="post" action="{{ url_for('filtrar_equipamentos') }}">
+                        <th class="titulo-tabela">
+                            <button class="botao-titulo-tabela" name="filtrar-tabela" value="id" title="Filtrar por ID de Cadastro">ID</button>
+                        </th>
+                        <th class="titulo-tabela">
+                            <button class="botao-titulo-tabela" name="filtrar-tabela" value="cod_siggi" title="Filtrar por Código do SIGGI">Codigo SIGGI</button>
+                        </th>
+                        <th class="titulo-tabela">
+                            <button class="botao-titulo-tabela" name="filtrar-tabela" value="tipo_equipamento" title="Filtrar por Tipo de Equipamento">Tipo de equipamento</button>
+                        </th>
+                        <th class="titulo-tabela">
+                            <button class="botao-titulo-tabela" name="filtrar-tabela" value="ip" title="Filtrar por IP">IP</button>
+                        </th>
+                        <th class="titulo-tabela">
+                            <button class="botao-titulo-tabela" name="filtrar-tabela" value="usuario" title="Filtrar por nome de usuario">Usuario</button>
+                        </th>
+                        <th class="titulo-tabela">Licenca</th>
+                        <th class="titulo-tabela">Editar</th>
+                    </form>
+                </tr>
+            </thead>
+            <tbody>
+                {% if equipamentos %}
+                    {% for equipamento in equipamentos %}
+                        <tr class="linha-tabela">
+                                    <td>{{ equipamento[0] }}</td>
+                                    <td>{{ equipamento[1] }}</td>
+                                    <td>{{ equipamento[2] }}</td>
+                                    <td>192.168.20.{{ equipamento[3] }}</td>
+                                    <td>{{ equipamento[4] }}</td>
+                                    <td>
+                                        <form class="menu-form" method="post" action="{{ url_for('listar_licenca') }}">
+                                            <button class="botoes-tabela" name="id_licenca" value="{{ equipamento[5] }}" title="Ver licença">
+                                                <img class="icone-botao-tabela" src="{{ url_for('static', filename='images/icone-info.png') }}">
+                                            </button>
+                                            <input class="input-escondido" name="id_equipamento" value="{{ equipamento[0] }}"></input>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form class="menu-form" method="post" action="{{ url_for('editar_equipamento') }}">
+                                            <button class="botoes-tabela" name="id_equipamento" value="{{ equipamento[0] }}" title="Editar informações">
+                                                <img class="icone-botao-tabela" src="{{ url_for('static', filename='images/icone-editar-branco.png') }}">
+                                            </button>
+                                        </form>
+                                    </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    {% endblock %}
+    <!-- Função para fechar a mensagem de alerta/retorno -->
+    <script>
+        function fecharMensagemFlash() {
+            document.querySelector('.flash-message').style.display = 'none';
+        }
+        function checarEnter(event) {
+            if (event.keyCode === 13) {
+                window.location.href = '/listar_equipamentos';
+            }
+        }
+    </script>
+</body>
+</html>

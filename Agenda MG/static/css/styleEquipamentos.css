@@ -1,0 +1,346 @@
+.menu{
+    display: flex;
+    width: 100%;
+    background-color: #363636;
+    border-radius: 26px;
+    height: 50px;
+    margin: 10px 0px;
+}
+
+.logo {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+}
+
+.icone-logo{
+    width: 200px;
+    height: auto;
+}
+
+.menu-direita {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0px;
+    padding-left: 100px;
+    width: 80%;
+}
+
+.menu-esquerda {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    width: 20%;
+    padding-right: 20px;
+}
+
+
+.menu-botoes-ativos {
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 15px;
+    text-transform: uppercase;
+    background-color: #26262600;
+    border: 0;
+    transition: 0.3s;
+}
+
+.menu-botoes {
+    color: #7d7d7d;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: #26262600;
+    border: 0;
+    transition: 0.3s;
+}
+.menu-botoes:hover {
+    color: #ffffff;
+    font-weight: bold;
+    scale: 1.1;
+}
+
+.icone-botao-menu {
+    width: 30px;
+    height: auto;
+}
+
+
+.divisor {
+    color: #7d7d7d;
+}
+body{
+    background-color: #262626;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+}
+.icone-fechar{
+    width: 15px;
+    height: auto;
+    align-items: right;
+    transition: 0.3s;
+}
+.icone-fechar:hover {
+    scale: 1.2;
+}
+.fundo{
+    margin: 0;
+    position:fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #262626;
+}
+.fundo-transparente {
+    margin: 0;
+    position:fixed;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: end;
+    background-color: #26262673;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    transition: 0.3s;
+}
+
+.menu-lateral {
+    text-align: center;
+    justify-content: end;
+    margin-right: 20px;
+    width: 400px;
+    height: 80vh;
+    padding: 30px;
+    border-radius: 23px;
+    border: 2px solid rgba(255,255,255,0.5);
+    background: rgba(38, 38, 38, 0.325);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+.menu-form-lateral {
+    margin-top: 100px;
+    margin-right: 0;
+    height: 50px;
+    border-radius: 20px 0px 0px 20px;
+    padding: 10px;
+    background-color: #aeaeae71;
+}
+
+.botao-fechar-menu-lateral {
+    width: 100%;
+    height: 100%;
+    background-color: #26262600;
+    border:0;
+}
+
+.icone-botao-menu-lateral {
+    width: 20px;
+    height: auto;
+}
+
+.botoes-menu-lateral {
+    width: 80%;
+    height: 50px;
+    margin: 10px;
+    font-size: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    color: rgb(156, 156, 156);
+    background-color: #aeaeae3e;
+    border: 1px solid white;
+    border-radius: 10px;
+}
+
+.botoes-menu-lateral:hover {
+    background-color: #ffffff3e;
+    color: white;
+}
+.flash-message {
+    position: fixed;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: auto;
+    padding: 30px;
+    border-radius: 23px;
+    border: 2px solid rgba(255,255,255,0.5);
+    background: rgba(38, 38, 38, 0.325);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.close-flash{
+    position: fixed;
+    right: 1rem;
+    top:1rem;
+    color: #505050;
+    background-color: #ffffff00;
+    border-left: none;
+    border: 0;
+}
+
+.close-flash:focus{
+    outline:solid 2px rgba(0, 225, 255, 0);
+}
+
+.instrucao-fechar{
+    position: fixed;
+    text-align: center;
+    color: #ffffff45;
+    bottom: 0rem;
+    left: 15rem;
+}
+
+.botoes-flash{
+    position: flex;
+    right: 2%;
+    top:15%;
+    background-color: #ffffff00;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    border: 2px solid #ffffff;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 10px;
+    transition: 0.3s;
+}
+.botoes-flash:hover{
+    scale: 1.2;
+    border: 2px solid #2bff00;
+    
+}
+.botoes-flash:nth-of-type(2):hover{
+    scale: 1.2;
+    border: 2px solid #fed100;
+}
+
+.box{
+    text-align: center;
+    align-items: center;
+}
+.box-licenca{
+    background-color: #26262600;
+    border-radius: 20px;
+    padding: 10px;
+    transition: 0.3s;
+}
+.box-licenca:hover{
+    color: #171717;
+    background-color: #ffffff;
+}
+.itens-licenca{
+    color: #ffffff;
+}
+
+.icone-windows{
+    width: 80px;
+    height: auto;
+}
+
+.botao-copiar{
+    position: fixed;
+    right: 3rem;
+    bottom: 3.5rem;
+    background-color: #ffffff00;
+    border:0;
+    transition: 0.3s;
+}
+.botao-copiar:hover{
+    scale:1.2;
+}
+.editar-equipamento{
+    text-align: center;
+}
+.input-editar::placeholder{
+    color: #363636;
+}
+.input-editar{
+    padding: 5px;
+    margin: 10px 0px;
+    border-radius: 10px;
+    border: solid 1px #ffffff;
+    text-align: center;
+    background-color: #ffffff69;
+}
+.input-editar:focus{
+    outline:solid 2px rgba(0, 225, 255, 0);
+    font-weight: bold;
+    color: black;
+}
+
+.label-editar{
+    padding-top: 10px;
+}
+
+.item-atual{
+    background-color: rgb(86, 255, 86);
+}
+
+
+table {
+    width: 100%;
+}
+
+th{
+    height: 40px;
+}
+
+.botao-titulo-tabela {
+    background-color: #26262600;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ffffff;
+}
+
+.botao-titulo-tabela:hover{
+    border: 2px solid #ffffff;
+}
+
+
+tr{
+    border-bottom: 1px solid #ffffff;
+    text-align: center;
+    width: 15%;
+    height: 30px;
+    padding: 2px;
+    transition: 0.3s;
+}
+td{
+    border-bottom: 1px solid #ffffff;
+    text-align: center;
+    width: 15%;
+    height: 30px;
+    padding: 2px;
+}
+.linha-tabela:hover{
+    background-color: #7d7d7d;
+}
+.icone-botao-tabela{
+    width: 30px; 
+    height: auto;
+}
+.botoes-tabela{
+    background-color: #26262600;
+    border: 0;
+    transition: 0.3s;
+}
+.botoes-tabela:hover{
+    scale: 1.2;
+}
+
+.input-escondido{
+    width: 0%;
+    display: none;
+}

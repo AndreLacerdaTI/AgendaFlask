@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleWts.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/Icones/icone-config.ico') }}" sizes="32x32">
+    <title>Localização WTS</title>
+</head>
+<body>
+    <div class="box-header">
+        <div class="menu" id="esconder">
+            <form class="home-form" method="post" action="{{ url_for('login') }}">
+                <button class="menu-botoes">
+                    <img class="icone-botao" src="{{ url_for('static', filename='images/icone-home.png') }}">
+                </button>
+            </form>
+        </div>
+    </div>
+    <h2>Usuarios SIGGI / WTS</h2>
+    <table>
+        <thead>
+            <tr>
+                <th class="titulo-esquerda">ID</th>
+                <th class="titulo-central">Usuario</th>
+                <th class="titulo-central">Senha</th>
+                <th class="titulo-central">Setor</th>
+                <th class="titulo-direita">Editar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in tabelaWts %}
+                    <tr class="linha-tabela">
+                        <td>{{ i[0] }}</td>
+                        <td>{{ i[1] }}</td>
+                        <td>{{ i[2] }}</td>
+                        <td>{{ i[3] }}</td>
+                        <td>
+                            <form method="post" action="{{ url_for('editar_usuarios_wts') }}">
+                                <button class="botao-editar" name="editar" value="{{i[0]}}">
+                                    <img class="icone-botao" src="{{ url_for('static', filename='images/icone-editar-branco.png') }}">
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+            {% endfor %}
+            <tr class="rodape-tabela"><td class="rodape-tabela">&nbsp;&nbsp;</td></tr>
+        </tbody>
+    </table>
+    <h2 class="titulo-ip">Localização</h2>
+    {% if tabelaIp %}
+        <table class="tabela-ip">
+            <thead>
+                <tr>
+                    <th class="titulo-esquerda">IP</th>
+                    <th class="titulo-central">MAC</th>
+                    <th class="titulo-central">Usuario</th>
+                    <th class="titulo-central">HOST</th>
+                    <th class="titulo-central">Setor</th>
+                    <th class="titulo-central">DHCP</th>
+                    <th class="titulo-direita">Editar&nbsp;&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in tabelaIp %}
+                        <tr class="linha-tabela">
+                            <td>192.168.20.{{ i[1] }}</td>
+                            <td>{{ i[2] }}</td>
+                            <td>{{ i[3] }}</td>
+                            <td>{{ i[4] }}</td>
+                            <td>{{ i[5] }}</td>
+                            <td>{{ i[6] }}</td>
+                            <td>
+                                <form method="post" action="{{ url_for('editar_ip') }}">
+                                    <button class="botao-editar" name="editar" value="{{i[0]}}">
+                                        <img class="icone-botao" src="{{ url_for('static', filename='images/icone-editar-branco.png') }}">
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                {% endfor %}
+                <tr class="rodape-tabela"><td class="rodape-tabela">&nbsp;&nbsp;</td></tr>
+            </tbody>
+        </table>
+    {% else %}
+        <h3>Nenhum IP vinculado</h3>
+        <form class="form-vincular" method="post" action="{{ url_for('tabela_ip') }}">
+            <button class="botao-vincular" name="editar" value="">
+                <img class="icone-botao" src="{{ url_for('static', filename='images/icone-vincular.png') }}">
+            </button>
+        </form>
+    {% endif %}
+</body>
+</html>

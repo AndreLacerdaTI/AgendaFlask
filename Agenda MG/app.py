@@ -1,16 +1,22 @@
 import sqlite3
 #from jinja2 import Template
-from flask import Flask, render_template, request, session, send_file
+from flask import Flask, render_template, request, session,flash, send_file, jsonify
 import os
+from openpyxl import Workbook
+import shutil
+import pyperclip
+from bancoComputadores import *
 
 app = Flask(__name__)
-app.secret_key = 'sua_chave_secreta'
+#app.secret_key = 'sua_chave_secreta'
+app.secret_key = 'segurancati'
 logado = []
+
 # rota principal
 @app.route('/')
 def index():
     directory = 'static/images/Banners'
-    
+    # Imagens banner do endomarketing
     # Obtém a lista de arquivos existentes no diretório
     file_list = os.listdir(directory)
     
@@ -27,11 +33,10 @@ def home():
     print('arquivos',file_list)
     return render_template('index.html',imagens=file_list)
 
+# Cadastro de Ramais
 @app.route('/paginaCadastro',methods=['POST'])
 def paginaCadastro():
     return render_template('cadastrar.html')
-
-
 
 # Cadastrando Ramal Direto
 @app.route('/cadastrarDireto', methods=['POST'])
@@ -258,36 +263,13 @@ def search_select():
         listaRamaisD.append(i)
     return render_template('search_select.html', rows=listaRamaisI, rows2=listaRamaisD)
 
-'''
-@app.route('/search_results_table',  methods=['POST'])
-def search_results_table():
-    dados = request.form['editar']
-    teste = request.form.to_dict()
-    print('teste:',teste)
-    minha_lista = list((request.form.to_dict()).values())
-    print('convertido:',minha_lista)
-    print('dados:',dados)
-    listaFiltros = dados.replace("(", "")
-    listaFiltros = listaFiltros.replace(")", "")
-    listaFiltros = listaFiltros.replace("[", "")
-    listaFiltros = listaFiltros.replace("]", "")
-    listaFiltros = listaFiltros.replace("'", "")
-    #listaSetor = listaFiltros.split(",")
-    listaFiltros = listaFiltros.replace(" ", "")
-    listaFiltros = listaFiltros.split(",")
-    #setor = str(listaSetor[2])
-    #print('SETOR',setor)
-    #print('SETOR tamanho', len(setor))
-    print(listaFiltros)
-    #return render_template('search_results.html',search_results=str(listaFiltros[0]),resultado_ramal=str(listaFiltros[1]),resultado_setor=setor,tipo_ramal=listaFiltros[3])
-    return render_template('search_results.html',search_results=str(listaFiltros[0]),resultado_ramal=str(listaFiltros[1]),resultado_setor=listaFiltros[2],id=listaFiltros[3],tipo_ramal=listaFiltros[4])
-'''
 @app.route('/buscar_ramal_search_select',  methods=['POST'])
 def buscar_ramal_search_select():
     busca = request.form['busca_term']
     rows = select_like(busca, str(busca))
     return render_template('search_select.html', rows=rows)
 
+# Selecionando no banco um ramal parecido com a busca
 def select_like(int, str):
     conn = sqlite3.connect('agenda.db')
     c = conn.cursor()
@@ -298,7 +280,7 @@ def select_like(int, str):
     rows.extend(c.fetchall())
     conn.close()
     return rows
-
+# Selecionando no banco um ramal por id
 def select_id(int,str):
     if str=='interno':
         conn = sqlite3.connect('agenda.db')
@@ -337,7 +319,7 @@ def search_results():
 def salvar_alteracao():
     tipo_ramal = request.form['tipo_ramal']
     id = request.form['id']
-    print(tipo_ramal)
+    #print(tipo_ramal)
     if request.form['action'] == 'cadastrar':
         conexao = sqlite3.connect('agenda.db')
         c = conexao.cursor()
@@ -514,6 +496,16 @@ def login():
     else:
         return render_template('login.html')
 
+@app.route('/admin_retorno', methods=['POST'])
+def admin_retorno(mensagem, submensagem):
+    print('admin_retorno')
+    flash(mensagem+'<br>')
+    flash(submensagem)
+    if 'logged_in' in session:
+        return render_template('admin.html',nome=session['usuario'],acesso=session['nivel_acesso'])
+    else:
+        return render_template('login.html')
+
 @app.route('/validarLogin', methods=['POST'])
 def validarLogin():
     usuario = request.form['usuario']
@@ -547,7 +539,7 @@ def admin():
 @app.route('/logout', methods=['POST'])
 def logout():
     session.pop('logged_in', None)
-    return render_template('index.html')
+    return home()
 
 @app.route('/editarBanner', methods=['POST'])
 def editarBanner():
@@ -714,11 +706,11 @@ def testar_mac(valor):
         return mac
     return None
 def testar_pesquisa(str):
-    print('Buscando correspondencia do usuario e host')
+    print('Buscando correspondencia do usuario, setor e host')
     import sqlite3
     conexao = sqlite3.connect('tabelaIP.db')
     c = conexao.cursor()
-    c.execute("SELECT * FROM tabelaIP WHERE usuario LIKE '%' || ? || '%' OR setor LIKE '%' || ? || '%'", (str,str))
+    c.execute("SELECT * FROM tabelaIP WHERE usuario LIKE '%' || ? || '%' OR setor LIKE '%' || ? || '%' OR host LIKE '%' || ? || '%'", (str,str,str))
     tabelaIP = c.fetchall()
     conexao.close()
     if (len(tabelaIP)!=0):
@@ -732,20 +724,21 @@ def filtrar_tabela_ip():
     else:
         ip = testar_ip(dados) # reduzindo ip para apenas os numeros finais
         mac = testar_mac(dados) # formatando a pesquisa MAC
-        usuario_setor = testar_pesquisa(dados) # Buscando por correspondencias de usuario e setor
-        if (ip==None) and (mac==None) and (usuario_setor==None):
+        usuario_setor_host = testar_pesquisa(dados) # Buscando por correspondencias de usuario, host e setor e inserindo na lista
+        if (ip==None) and (mac==None) and (usuario_setor_host==None):
             return render_template('tabelaip.html',vazio='vazio')
         import sqlite3
         conexao = sqlite3.connect('tabelaIP.db')
         c = conexao.cursor()
         #c.execute('SELECT ip, mac, usuario, host, setor, dhcp FROM tabelaIP')
-        #c.execute('SELECT * FROM tabelaIP WHERE ip = ? OR mac = ? OR usuario = ? OR setor = ? ORDER BY ip', (ip,mac,dados,dados))
+        #c.execute('SELECT * FROM tabelaIP WHERE ip = ? OR mac = ? OR usuario = ? OR setor = ? ORDER BY ip', (ip,mac,dados,dados)
         c.execute('SELECT * FROM tabelaIP WHERE ip = ? OR mac = ? ORDER BY ip', (ip,mac))
         tabela_IP_MAC = c.fetchall()
         tabela = []
         tabela.extend(tabela_IP_MAC)
-        if (usuario_setor!=None):
-            tabela.extend(usuario_setor)
+        # Se existem usuarios, host ou setores compativeis com a pesquisa serão adicionados a tabela
+        if (usuario_setor_host!=None): 
+            tabela.extend(usuario_setor_host)
         conexao.close()
         if (len(tabela) == 1):
             if(tabela[0]==[]):
@@ -826,7 +819,9 @@ def salvar_edicao_ip():
     conexao.close()
 
     #return render_template('login.html',mensagemRetorno='Alteração concluida')
-    return login()
+    mensagem = 'IP alterado com sucesso!'
+    submensagem = '192.168.20.'+ip
+    return admin_retorno(mensagem, submensagem)
 
 def buscar_login():
     # Importando agenda interna
@@ -889,6 +884,22 @@ def salvar_novo_login():
 
     return login()
 
+@app.route('/excluir_login', methods=['POST'])
+def excluir_login():
+    print('entrou no excluir')
+    id = request.form['id']
+    print(id)
+    # Importando banco
+    conn = sqlite3.connect('users.db')
+    cur = conn.cursor()
+    cur.execute("DELETE FROM usuarios WHERE id=?", (id,))
+    conn.commit()
+    conn.close()
+
+    mensagem = "Usuário excluido com sucesso!"
+    submensagem = ''
+    return admin_retorno(mensagem, submensagem)
+
 @app.route('/usuarios_wts', methods=['POST'])
 def usuarios_wts():
     import sqlite3
@@ -930,17 +941,285 @@ def salvar_edicao_usuarios_wts():
     conn.commit()
     conn.close()
 
-    return login()
+    mensagem = 'Usuário alterado com sucesso!'
+    submensagem = usuario
+    return admin_retorno(mensagem, submensagem)
 
 @app.route('/usuarios_wts_ip', methods=['POST']) # Buscar qual a localização / pc está usando o usuario SIGGI
 def usuarios_wts_ip():
+    id_usuario = request.form['id_usuario']
     dados = request.form['id_ip']
     import sqlite3
     conexao = sqlite3.connect('tabelaIP.db')
     c = conexao.cursor()
     c.execute('SELECT * FROM tabelaIP WHERE ip = ? ORDER BY ip', (dados,))
-    tabela = c.fetchall()
-    return render_template('tabelaip.html',tabela=tabela)
+    tabelaIp = c.fetchall()
+
+    conexao = sqlite3.connect('tabelaWts.db')
+    c = conexao.cursor()
+    #c.execute('SELECT ip, mac, usuario, host, setor, dhcp FROM tabelaIP')
+    c.execute('SELECT * FROM tabelaWts WHERE id = ? ORDER BY id AND usuario',(id_usuario,))
+    tabelaWts = c.fetchall()
+    conexao.close()
+
+    if len(tabelaIp)==0:
+        print('Nenhum vinculo')
+        return render_template('vincular_wts_ip.html',tabelaWts=tabelaWts)
+    else:
+        return render_template('vincular_wts_ip.html',tabelaIp=tabelaIp,tabelaWts=tabelaWts)
+
+@app.route('/exportar_planilhas', methods=['POST']) # Exportar os dados do banco como planilhas para realizar o download
+def exportar_planilhas():
+    # criando uma lista de mensagem de retorno
+    mensagens = []
+    # definindo uma submensagem caso não aconteça nenhum erro durante o processo
+    submensagem = 'Para realizar o download clique em Utilidades e escolha a planilha que deseja'
+    # Testando erros na primeira exportação
+    try:
+        ''' Exportando Agenda '''
+        # Conexão com banco
+        Interna = "SELECT * FROM agendaInterna"
+        conexao = sqlite3.connect('agenda.db')
+        cursor = conexao.cursor()
+        cursor.execute(Interna)
+        agendaInterna = cursor.fetchall()
+
+        Direta = "SELECT * FROM agendaDireta"
+        conexao = sqlite3.connect('agenda.db')
+        cursor = conexao.cursor()
+        cursor.execute(Direta)
+        agendaDireta = cursor.fetchall()
+
+        # Criando planilha
+        book = Workbook()
+        sheet = book.active
+        nome_xlsx = f"static/download/Ramais.xlsx"
+
+        sheet['A1'] = 'Ramais Internos'
+        sheet['C1'] = 'Ramais Diretos'
+        sheet['A2'] = 'Ramal'
+        sheet['B2'] = 'Nome'
+        sheet['C2'] = 'Ramal'
+        sheet['D2'] = 'Nome'
+        cont = 3
+        for i in agendaInterna:
+            sheet['A'+str(cont)] = int(i[2])
+            sheet['B'+str(cont)] = str(i[1])
+            cont = cont + 1
+        cont = 3
+        for i in agendaDireta:
+            sheet['C'+str(cont)] = int(i[2])
+            sheet['D'+str(cont)] = str(i[1])
+            cont = cont + 1
+        book.save(nome_xlsx)
+        mensagem = 'Planilha de Ramais exportada com sucesso!'
+    except Exception as e:
+        erro = f"{str(e)}"
+        resumo = erro
+        if erro[:47]=="[Errno 13] Permission denied: 'static/download/":
+            mensagem = 'Erro ao salvar Planilha de Ramais!<br>Verifique se não está com a planilha original aberta.<br>'
+            submensagem = 'Codigo: '+resumo
+    mensagens.append(mensagem)
+        
+    ''' ----------------------- Exportando IPs --------------------------- '''
+    
+    # Importando banco de dados
+    #import sqlite3
+    conexao = sqlite3.connect('tabelaIP.db')
+    c = conexao.cursor()
+    c.execute('SELECT * FROM tabelaIP ORDER BY ip')
+    tabelaIp = c.fetchall()
+    try:
+        # Criando planilha
+        book = Workbook()
+        sheet = book.active
+        nome_xlsx = f"static/download/IPs.xlsx"
+
+        sheet['A1'] = 'IP'
+        sheet['B1'] = 'MAC'
+        sheet['C1'] = 'Usuarios'
+        sheet['D1'] = 'Host'
+        sheet['E1'] = 'Setor'
+        sheet['F1'] = 'DHCP'
+
+        cont = 2 # define a contagem inicial
+        for i in tabelaIp:
+            sheet['A'+str(cont)] = '192.168.20.'+str(i[1]) # insere o valor na planilha
+            sheet['B'+str(cont)] = i[2]
+            sheet['C'+str(cont)] = i[3]
+            sheet['D'+str(cont)] = i[4]
+            sheet['E'+str(cont)] = i[5]
+            sheet['F'+str(cont)] = i[6]
+            cont = cont + 1
+
+        book.save(nome_xlsx)
+
+        mensagem = 'Planilha de IPs exportada com sucesso!'
+
+    except Exception as e:
+        erro = f"{str(e)}"
+        resumo = erro
+        if erro[:47]=="[Errno 13] Permission denied: 'static/download/":
+            mensagem = 'Erro ao salvar Planilha de IPs!<br>Verifique se não está com a planilha original aberta.<br>'
+            submensagem = 'Codigo: '+resumo
+    mensagens.append(mensagem)
+
+    ''' ----------------------- Exportando usuarios WTS --------------------------- '''
+    # Importando banco de dados
+    #import sqlite3
+    conexao = sqlite3.connect('tabelaWts.db')
+    c = conexao.cursor()
+    c.execute('SELECT * FROM tabelaWts ORDER BY id')
+    tabelaWts = c.fetchall()
+    try:
+        # Criando planilha
+        book = Workbook()
+        sheet = book.active
+        nome_xlsx = f"static/download/Usuarios WTS.xlsx"
+
+        sheet['A1'] = 'Usuario'
+        sheet['B1'] = 'Senha'
+        sheet['C1'] = 'Setor'
+        sheet['D1'] = 'IP'
+
+        cont = 2 # define a contagem inicial
+        for i in tabelaWts:
+            sheet['A'+str(cont)] = str(i[1]) # insere o valor na planilha
+            sheet['B'+str(cont)] = i[2]
+            sheet['C'+str(cont)] = i[3]
+            if i[4]=='None' or i[4]==None:
+                sheet['D'+str(cont)] = '-'
+            else:
+                sheet['D'+str(cont)] = '192.168.20.'+str(i[4])
+            cont = cont + 1
+
+        book.save(nome_xlsx)
+        mensagem = 'Planilha Usuarios WTS exportada com sucesso!'
+
+    except Exception as e:
+        erro = f"{str(e)}"
+        resumo = erro
+        if erro[:47]=="[Errno 13] Permission denied: 'static/download/":
+            mensagem = 'Erro ao salvar Planilha Usuario WTS!<br>Verifique se não está com a planilha original aberta.<br>'
+            submensagem = 'Codigo: '+resumo
+    mensagens.append(mensagem)
+
+    for mensagem in mensagens:
+        flash(mensagem+'<br>')
+
+    flash(submensagem)
+
+    return login()
+
+def fazer_copia_banco(str):
+    # Caminho do banco de dados original
+    nome_banco = str
+    caminho_origem = os.path.join(app.root_path, nome_banco+'.db')
+
+    # Caminho da pasta de destino para a cópia
+    pasta_destino = os.path.join(app.root_path)
+    pasta_destino = pasta_destino+'/static/download/'
+    print('Caminho: ',pasta_destino)
+
+    # Verificar se a pasta de destino existe, caso contrário, criar
+    if not os.path.exists(pasta_destino):
+        os.makedirs(pasta_destino)
+
+    # Nome do arquivo da cópia do banco de dados
+    nome_arquivo_copia = nome_banco+'_backup.db'
+
+    # Caminho completo para a cópia do banco de dados
+    caminho_copia = os.path.join(pasta_destino, nome_arquivo_copia)
+
+    # Copiar o arquivo do banco de dados para a pasta de destino
+    shutil.copy2(caminho_origem, caminho_copia)
+
+    mensagem = 'Cópia do banco de dados '+ nome_banco +' criada com sucesso!'
+    submensagem = 'Iniciando download'
+    messages = []
+    messages.append(mensagem)
+    messages.append(submensagem)
+    return messages
+
+@app.route('/exportar_banco_agenda',methods=['POST'])
+def exportar_banco_agenda():
+    nome_banco = request.form['nome_banco']
+    # Clonando para o diretorio /static/download/
+    messages = fazer_copia_banco(nome_banco)
+    # Caminho para o arquivo do banco de dados
+    pasta_destino = os.path.join(app.root_path)
+    pasta_destino = pasta_destino+'/static/download/'+nome_banco+'_backup.db'
+    db_path = pasta_destino
+    # Disparar o download do arquivo
+    return send_file(db_path, as_attachment=True)
+    
+    #return render_template('TI.html')
+
+""" Equipamentos """
+
+@app.route('/listar_equipamentos',methods=['POST'])
+def listar_equipamentos():
+    lista = list(ListarEquipamentos())
+    #print(lista)
+    return render_template('equipamentos.html',equipamentos=lista[0])
+
+@app.route('/filtrar_equipamentos',methods=['POST'])
+def filtrar_equipamentos():
+    filtrar = request.form['filtrar-tabela']
+    equipamentos = list(FiltrarEquipamentos(filtrar))
+    return render_template('equipamentos.html',equipamentos=equipamentos[0])
+
+@app.route('/abrir_menu_lateral',methods=['POST'])
+def abrir_menu_lateral():
+    return render_template('equipamentos.html',menu_lateral='ativo')
+
+@app.route('/copiar_licenca',methods=['POST'])
+def copiar_licenca():
+    id_licenca = request.form['id_licenca']
+    licenca = select_licenca_id(id_licenca)
+    pyperclip.copy(licenca[2])
+    #return listar_equipamentos()
+    return render_template('equipamentos.html',notificacao='Licença copiada para a Área de Transferência (Ctrl+V)')
+
+@app.route('/listar_licenca',methods=['POST'])
+def listar_licenca():
+    id_licenca = request.form['id_licenca']
+    licenca = select_licenca_id(id_licenca)
+    print(licenca[1])
+    if (licenca[1]=='Windows 7 Professional x64'):
+        versao = 'windows-7'
+    elif (licenca[1]=='Windows 10 Pro x64'):
+        versao = 'windows-10'
+    if (licenca[1]=='Windows 11 Pro x64'):
+        versao = 'windows-11'
+
+    id_equipamento = request.form['id_equipamento']
+    equipamento = select_equipamento_id(id_equipamento)
+
+    flash(licenca)
+    return render_template('equipamentos.html',licenca=licenca, info_equipamento=equipamento, versao=versao)
+
+@app.route('/editar_equipamento',methods=['POST'])
+def editar_equipamento():
+    id_equipamento = request.form['id_equipamento']
+    #print(id_equipamento)
+    equipamento = select_equipamento_id(id_equipamento)
+    licencas = ListarLicencas()
+    #flash(equipamento)
+    return render_template('equipamentos.html',equipamento=equipamento, licencas=licencas)
+
+@app.route('/salvar_alteracoes_equipamento',methods=['GET','POST'])
+def salvar_alteracoes_equipamento():
+    if(request.form['acao']=='salvar'):
+        usuario = request.form['usuario']
+        tipo_equipamento = request.form.get('tipo_equipamento')
+        ip = request.form['ip']
+        licencas = request.form['licencas']
+
+        print(usuario,tipo_equipamento,ip,licencas)
+        return render_template('equipamentos.html',notificacao='Operação realizada com sucesso!')
+    else:
+        return render_template('equipamentos.html',notificacao='Operação cancelada')
 
 if __name__ == '__main__':
     #app.run(host='192.168.20.125')

@@ -39,6 +39,9 @@
 
                     <button type="submit" class="botao-salvar">Salvar</button>
                 </form>
+                <form method="post" action="{{ url_for('excluir_login') }}">
+                    <button type="submit" class="botao-salvar" name="id" value="{{user_info[3]}}">Excluir</button>
+                </form>
             {% endif %}
             {% if user_new=='novo' %}
                 <form method="post" action="{{ url_for('salvar_novo_login') }}">

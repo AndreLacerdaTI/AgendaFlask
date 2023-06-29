@@ -1,3 +1,27 @@
+.flash-message {
+    position: fixed;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: auto;
+    padding: 30px;
+    border-radius: 23px;
+    border: 2px solid rgba(255,255,255,0.5);
+    background: rgba(255, 255, 255, 0.325);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.close-flash{
+    position: fixed;
+    right: 2%;
+    top:15%;
+}
+
 body{
     background-color: #bdbdbd;
 }
@@ -17,7 +41,14 @@ body{
     width: 30px;
     height: auto;
 }
-
+.icone-fechar {
+    width: 10px;
+    height: auto;
+    transition: 0.3s;
+}
+.icone-fechar:hover {
+    scale: 1.2;
+}
 .voltar-agenda{
     color: #ffffff;
     font-size: 20px;

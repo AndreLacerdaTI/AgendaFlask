@@ -1,9 +1,101 @@
+.flash-message {
+    position: fixed;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: auto;
+    padding: 30px;
+    border-radius: 23px;
+    border: 2px solid rgba(255,255,255,0.5);
+    background: rgba(255, 255, 255, 0.325);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.close-flash{
+    position: fixed;
+    right: 2%;
+    top:15%;
+    color: #505050;
+    background-color: #ffffff00;
+    border-left: none;
+    border: 0;
+}
+.icone-fechar {
+    width: 10px;
+    height: auto;
+    transition: 0.3s;
+}
+.icone-fechar:hover {
+    scale: 1.2;
+}
+
+.logo{
+    width: 300px;
+    height: auto;
+}
+div {
+    display: block;
+}
+.box-header{
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+}
+.menu {
+    color: #000000;
+    background-color: #363636;
+    width: 100%;
+    height: 50px;
+    align-items: left;
+    text-align: left;
+    border-radius: 24px;
+    display: inline-block;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.menu-form{
+    display: inline-block;
+    width: 40%;
+}
+
+
+.menu-botoes {
+    height: auto;
+    width: 20%;
+    padding-top: 10px;
+    color: rgba(130, 130, 130, 0.348);
+    background-color: #ffffff00;
+    cursor: pointer;
+    border: 0px;
+    transition: 0.5s;
+}
+
+.menu-botoes:hover{
+    scale: 1.2;
+}
+
+.home-form{
+    width: 30px;
+    display: inline-block;
+    padding-left: 10px;
+}
+
+.icone-botao-home{
+    width: 30px;
+    height: auto;
+}
+
 body{
     background-color: #262626;
 }
 h1{
     color: #ffffff;
-    border-bottom: 2px solid #FED100;
+    border-bottom: 2px solid #fe0000;
     display:inline-block;
     margin-left: 12px;
     font-size: 22px;
@@ -69,6 +161,36 @@ ul li a::before {
     width: 100px;
     height: 100px;
     background: #0073ff;
+    right: -5px;
+    bottom: 0;
+    border-radius: 23px;
+    z-index: -1;
+    transform-origin: 100% 100%;
+    transform: rotate(5deg);
+    transition: 0.3s;
+}
+
+.planilhas::before {
+    content: " ";
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: #33C481;
+    right: -5px;
+    bottom: 0;
+    border-radius: 23px;
+    z-index: -1;
+    transform-origin: 100% 100%;
+    transform: rotate(5deg);
+    transition: 0.3s;
+}
+
+.bancos::before {
+    content: " ";
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: #a640ff;
     right: -5px;
     bottom: 0;
     border-radius: 23px;

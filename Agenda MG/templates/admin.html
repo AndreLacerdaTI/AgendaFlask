@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,6 +10,23 @@
 </head>
 <body>
     <div class="fundo-admin">
+        <!-- Mensagem de alerta/retorno -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-message">
+                    {% for message in messages %}
+                        <span>{{ message|safe }}</span><br>
+                        <button class="close-flash" onclick="fecharMensagemFlash()">
+                            <img class="icone-fechar" src="{{ url_for('static', filename='images/icone-fechar-mensagem.png') }}">
+                        </button>
+                        {% if submensagem%}
+                            <span>{{ submensagem }}</span><br>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
         <!-- Voltar para a Agenda -->
         <form class="form-voltar" method="post" action="{{ url_for('abrirAgenda') }}">
             <button class="voltar-agenda">
@@ -54,11 +71,17 @@
                 <form method="post" action="{{ url_for('tabela_ip') }}">
                     <button type="submit" class="botao-ti">IP's</button>
                 </form><br>
+                <form method="post" action="{{ url_for('listar_equipamentos') }}">
+                    <button type="submit" class="botao-ti">PC's e licenças</button>
+                </form><br>
                 <form method="post" action="{{ url_for('editar_logins') }}">
                     <button type="submit" class="botao-ti">Usuarios agenda</button>
                 </form><br>
                 <form method="post" action="{{ url_for('usuarios_wts') }}">
                     <button type="submit" class="botao-ti">Usuarios SIGGI</button>
+                </form><br>
+                <form method="post" action="{{ url_for('exportar_planilhas') }}">
+                    <button type="submit" class="botao-ti">Exportar planilhas</button>
                 </form><br>
             {% endif %}
         {% endif %}
@@ -66,5 +89,11 @@
                 <p class="mensagem-retorno">{{mensagemRetorno}}</p>
         {% endif %}
     </div>
+    <!-- Função para fechar a mensagem de alerta/retorno -->
+    <script>
+        function fecharMensagemFlash() {
+            document.querySelector('.flash-message').style.display = 'none';
+        }
+    </script>
 </body>
 </html>

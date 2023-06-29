@@ -1,13 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleWts.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/Icones/icone-config.ico') }}" sizes="32x32">
     <title>Usuarios SIGGI</title>
 </head>
 <body>
+    <div class="box-header">
+        <div class="menu" id="esconder">
+            <form class="home-form" method="post" action="{{ url_for('login') }}">
+                <button class="menu-botoes">
+                    <img class="icone-botao" src="{{ url_for('static', filename='images/icone-home.png') }}">
+                </button>
+            </form>
+        </div>
+    </div>
     <h2>Usuarios SIGGI / WTS</h2>
     <table>
         <thead>
@@ -29,6 +39,7 @@
                         <td>{{ i[3] }}</td>
                         <td>
                             <form method="post" action="{{ url_for('usuarios_wts_ip') }}">
+                                <input class="id-usuario-esconder" name="id_usuario" value="{{ i[0] }}"></input readonly>
                                 <button class="botao-editar" name="id_ip" value="{{i[4]}}">
                                     <img class="icone-botao" src="{{ url_for('static', filename='images/icone-pc-user.png') }}">
                                 </button>

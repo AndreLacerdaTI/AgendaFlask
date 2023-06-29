@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vídeos em Loop</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            getVideos();
+        });
+
+        function getVideos() {
+            $.getJSON('/get_videos', function(data) {
+                playVideos(data);
+            });
+        }
+
+        function playVideos(videoFiles) {
+            var currentVideoIndex = 0;
+            var videoPlayer = document.getElementById('video-player');
+
+            function playNextVideo() {
+                var videoFile = videoFiles[currentVideoIndex];
+                var videoSource = document.createElement('source');
+                videoSource.src = "{{ url_for('static', filename='video.mp4') }}" + videoFile;
+                videoSource.type = 'video/mp4';
+
+                videoPlayer.innerHTML = '';
+                videoPlayer.appendChild(videoSource);
+                videoPlayer.load();
+                videoPlayer.play();
+
+                currentVideoIndex = (currentVideoIndex + 1) % videoFiles.length;
+
+                videoPlayer.onended = function() {
+                    playNextVideo();
+                };
+            }
+
+            playNextVideo();
+        }
+    </script>
+</head>
+<body>
+    <video id="video-player" autoplay></video>
+</body>
+</html>

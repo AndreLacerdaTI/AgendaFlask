@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,6 +9,32 @@
     <link rel="icon" href="{{ url_for('static', filename='images/Icones/icone-config.ico') }}" sizes="32x32">
 </head>
 <body>
+    <!-- Mensagem de alerta/retorno -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-message">
+                {% for message in messages %}
+                    <span>{{ message|safe }}</span><br>
+                    <button class="close-flash" onclick="fecharMensagemFlash()">
+                        <img class="icone-fechar" src="{{ url_for('static', filename='images/icone-fechar-mensagem.png') }}">
+                    </button>
+                    {% if submensagem%}
+                        <span>{{ submensagem }}</span><br>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    <center><img class="logo" src="{{ url_for('static', filename='images/ai-branco.png') }}"></center>
+    <div class="box-header">
+        <div class="menu" id="esconder">
+            <form class="home-form" method="post" action="{{ url_for('login') }}">
+                <button class="menu-botoes">
+                    <img class="icone-botao-home" src="{{ url_for('static', filename='images/icone-home.png') }}">
+                </button>
+            </form>
+        </div>
+    </div>
     <h1>Utilitários para Download</h1>
     <ul>
         <li>
@@ -26,5 +52,87 @@
             </a>
         </li>
     </ul>
+    <h1>Planilhas de controle</h1>
+    <ul>
+        <li>
+            <a class="planilhas">
+                <form method="post" action="{{ url_for('exportar_planilhas') }}">
+                    <button type="submit" class="botao-itens">
+                        <img class="icone-botao" src="{{ url_for('static', filename='images/icone-atualizar.png') }}">
+                        <br>Gerar planilhas atualizadas
+                    </button>
+                </form>
+            </a>
+        </li>
+        <li>
+            <a class="planilhas" href="{{ url_for('static', filename='download/IPs.xlsx') }}" download>
+                <button type="submit" class="botao-itens">
+                    <img class="icone-botao" src="{{ url_for('static', filename='images/Icones/icone-baixar-planilha.png') }}">
+                    <br>IPs</button>
+            </a>
+        </li>
+        <li>
+            <a class="planilhas" href="{{ url_for('static', filename='download/Ramais.xlsx') }}" download>
+                <button type="submit" class="botao-itens">
+                    <img class="icone-botao" src="{{ url_for('static', filename='images/Icones/icone-baixar-planilha.png') }}">
+                    <br>Ramais</button>
+            </a>
+        </li>
+        <li>
+            <a class="planilhas" href="{{ url_for('static', filename='download/Usuarios WTS.xlsx') }}" download>
+                <button type="submit" class="botao-itens">
+                    <img class="icone-botao" src="{{ url_for('static', filename='images/Icones/icone-baixar-planilha.png') }}">
+                    <br>Usuarios WTS</button>
+            </a>
+        </li>
+    </ul>
+    <h1>Backup Banco de dados</h1>
+    <ul>
+        <li>
+            <a class="bancos">
+                <form method="post" action="{{ url_for('exportar_banco_agenda') }}">
+                    <button type="submit" class="botao-itens" name="nome_banco" value="agenda">
+                        <img class="icone-botao" src="{{ url_for('static', filename='images/Icones/icone-banco.png') }}">
+                        <br>Agenda.db
+                    </button>
+                </form>
+            </a>
+        </li>
+        <li>
+            <a class="bancos">
+                <form method="post" action="{{ url_for('exportar_banco_agenda') }}">
+                    <button type="submit" class="botao-itens" name="nome_banco" value="tabelaIP">
+                        <img class="icone-botao" src="{{ url_for('static', filename='images/Icones/icone-banco.png') }}">
+                        <br>tabelaIP.db
+                    </button>
+                </form>
+            </a>
+        </li>
+        <li>
+            <a class="bancos">
+                <form method="post" action="{{ url_for('exportar_banco_agenda') }}">
+                    <button type="submit" class="botao-itens" name="nome_banco" value="tabelaWts">
+                        <img class="icone-botao" src="{{ url_for('static', filename='images/Icones/icone-banco.png') }}">
+                        <br>tabelaWts.db
+                    </button>
+                </form>
+            </a>
+        </li>
+        <li>
+            <a class="bancos">
+                <form method="post" action="{{ url_for('exportar_banco_agenda') }}">
+                    <button type="submit" class="botao-itens" name="nome_banco" value="users">
+                        <img class="icone-botao" src="{{ url_for('static', filename='images/Icones/icone-banco.png') }}">
+                        <br>users.db
+                    </button>
+                </form>
+            </a>
+        </li>
+    </ul>
+    <script>
+        function fecharMensagemFlash() {
+            document.querySelector('.flash-message').style.display = 'none';
+        }
+    </script>
 </body>
 </html>

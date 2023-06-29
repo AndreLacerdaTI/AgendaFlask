@@ -5,11 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleIP.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/Icones/icone-config.ico') }}" sizes="32x32">
     <title>Tabela de IP</title>
 </head>
 <body>
     <div class="box-header">
         <div class="menu" id="esconder">
+            <form class="home-form" method="post" action="{{ url_for('login') }}">
+                <button class="menu-botoes">
+                    <img class="icone-botao" src="{{ url_for('static', filename='images/icone-home.png') }}">
+                </button>
+            </form>
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <img class="icone-botao" src="{{ url_for('static', filename='images/icone-filtro.png') }}">

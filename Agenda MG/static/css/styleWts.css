@@ -23,6 +23,31 @@ h2 {
     float: left;
     text-transform: uppercase;
 }
+.titulo-ip {
+    width: 100%;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #ffffff;
+    font-size: 20;
+    font-family: 'Arial';
+    font-weight: 600;
+    border-radius: 22px;
+    border: 2px solid #1aff00;
+    float: left;
+    text-transform: uppercase;
+}
+h3 {
+    width: 100%;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #ffffff;
+    font-size: 20;
+    font-family: 'Arial';
+    font-weight: 600;
+    border-radius: 22px;
+}
 .titulo-direto{
     margin-left: 0.5%;
 }
@@ -41,9 +66,17 @@ table{
     color: #ffffff;
 }
 
-.tabela-direto{
+.tabela-ip{
+    width: 100%;
+    font-family: 'Arial';
+    padding: 2px;
     float: left;
+    margin-right: 1%;
+    border: 2px solid #1aff00;
+    border-radius: 40px;
+    color: #ffffff;
 }
+
 .titulo-esquerda {
     text-align: center;
     width:16%;
@@ -76,6 +109,13 @@ td {
     border-bottom: 1px solid #aaaaaa;
     padding: 2px;
 }
+
+.id-usuario-esconder{
+    width: 0px;
+    background-color: #00000000;
+    border: 0;
+}
+
 .linha-tabela {
     transition: 0.5s;
 }
@@ -203,6 +243,22 @@ td {
 .header-menu-editar{
     display: inline-block;
 }
+
+.menu-botoes {
+    height: auto;
+    width: 20%;
+    padding-top: 10px;
+    color: rgba(130, 130, 130, 0.348);
+    background-color: #ffffff00;
+    cursor: pointer;
+    border: 0px;
+    transition: 0.5s;
+}
+
+.menu-botoes:hover{
+    scale: 1.2;
+}
+
 div {
     display: block;
 }
@@ -216,7 +272,8 @@ div {
     background-color: #363636;
     width: 100%;
     height: 50px;
-    
+    align-items: left;
+    text-align: left;
     border-radius: 24px;
     display: inline-block;
     padding-top: 5px;
@@ -225,6 +282,12 @@ div {
 .menu-form{
     display: inline-block;
     width: 40%;
+}
+
+.home-form{
+    width: 30px;
+    display: inline-block;
+    padding-left: 10px;
 }
 
 .botao-salvar{
@@ -281,4 +344,23 @@ div {
     border: 2px solid #FED100;
     font-weight: bold;
     color: #ffffff;
+}
+
+.botao-vincular{
+    background-color: #1aff0000;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 23px;
+    align-items: center;
+    transition: 0.3s;
+    padding: 5px;
+    width: 100px;
+}
+.botao-vincular:hover{
+    scale: 1.2;
+    border: 2px solid #1aff00;
+}
+.form-vincular{
+    width: 100%;
+    align-items: center;
+    text-align: center;
 }
